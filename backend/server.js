@@ -31,8 +31,6 @@ app.use((error, request, response, next) => {
 });
 
 
-
-
 //Assign port number
 const port = process.env.PORT || 7777;
 app.listen(port, () => console.log(`Web server running on port ${port}`));
