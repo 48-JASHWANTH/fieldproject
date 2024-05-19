@@ -1,0 +1,8 @@
+SQL server Installation:
+https://youtu.be/UTkA-6o419Q?si=MSt82mOIr3MPoPg5
+
+SQL server Authentication:
+https://youtu.be/sxRUdVte5jM?si=FwuTQ5vNsCC_gWYN
+
+Connection of database and server (expressJS,nodeJS -> Any problem)
+https://youtu.be/uDS6c6DZyY4?si=98cmWff_QGW-fbmo
