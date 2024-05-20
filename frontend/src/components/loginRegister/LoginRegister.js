@@ -26,18 +26,18 @@ function LoginRegister() {
           <div className="sign-in">
             <form action="#">
               <img src={vnrlogo} alt="" />
-              <h1 className="signUpHead">SignIn</h1>
+              <h1 className="signUpHead">Sign In</h1>
               <input
                 type="email"
                 name="email"
                 id="email"
-                placeholder="Enter email"
+                placeholder="User ID"
                 required
               />
               <input
                 type="password"
                 name="Password"
-                placeholder="Enter password"
+                placeholder="Password"
                 required
               />
               <a href="#">Forgot your Password?</a>
@@ -47,18 +47,18 @@ function LoginRegister() {
           <div className="sign-up">
             <form action="#">
               <img src={vnrlogo} alt="" />
-              <h1 className="signUpHead">SignUp</h1>
-              <input type="email" name="email" placeholder="Enter email" />
-              <input type="text" name="Name" placeholder="Enter name" />
-              <input
-                type="password"
-                name="Password"
-                placeholder="Enter password"
-              />
+              <h1 className="signUpHead">Sign Up</h1>
+              <input type="text" name="Name" placeholder="User ID" />
+              <input type="email" name="email" placeholder="Email" />
               <input
                 type="tel"
                 name="number"
-                placeholder="Enter contact number"
+                placeholder="Contact number"
+              />
+              <input
+                type="password"
+                name="Password"
+                placeholder="Password"
               />
               <button>Sign Up</button>
             </form>
@@ -66,7 +66,6 @@ function LoginRegister() {
           <div className="overlay-container1">
             <div className="overlay">
               <div className="overlay-left">
-                {/* <h1>Login Here!</h1> */}
                 <h1>Already have an account ?</h1>
                 <button id="signIn" onClick={handleSignInClick}>
                   Sign In
