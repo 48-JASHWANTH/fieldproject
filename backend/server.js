@@ -2,6 +2,10 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 const sqlServer = require("mssql");
+const path = require('path')
+
+//deploying react bulid in this server
+app.use(express.static(path.join(__dirname,'../frontend/build')))
 
 const dbConfig = {
   user: process.env.user,
@@ -30,17 +34,24 @@ connectToDatabase();
 //To parse the body of request
 app.use(express.json())
 
+
 //Importing API routes
 const userApp = require("./APIs/userApi");
 app.use('/userApi',userApp)
 
 
-//express error handler
+
+app.use((req,res,next)=>{
+  res.sendFile(path.join(__dirname,'../frontend/build/index.html'))
+})
+
+
+//Error handling
 app.use((error, request, response, next) => {
   response.send({ message: "error", payload: error.message });
 });
 
 
-//Assign port number
+//Assigning port number
 const port = process.env.PORT || 7777;
 app.listen(port, () => console.log(`Web server running on port ${port}`));
