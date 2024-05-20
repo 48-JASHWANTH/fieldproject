@@ -11,19 +11,29 @@ const dbConfig = {
   options: {
     encrypt: true,
     trustServerCertificate: true,
+    connectTimeout: 86400000
   },
 };
 
 async function connectToDatabase() {
   try {
-    await sqlServer.connect(dbConfig);
+    const pool = await sqlServer.connect(dbConfig);
     console.log("Connected to the SQL Server database");
+    app.set('dbPool',pool)
   } catch (err) {
     console.error("Database connection failed:", err);
   }
 }
 
 connectToDatabase();
+
+//To parse the body of request
+app.use(express.json())
+
+//Importing API routes
+const userApp = require("./APIs/userApi");
+app.use('/userApi',userApp)
+
 
 //express error handler
 app.use((error, request, response, next) => {
