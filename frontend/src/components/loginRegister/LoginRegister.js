@@ -67,14 +67,13 @@ function LoginRegister() {
             <div className="overlay">
               <div className="overlay-left">
                 {/* <h1>Login Here!</h1> */}
-                <h2>Already have an account ?</h2>
+                <h1>Already have an account ?</h1>
                 <button id="signIn" onClick={handleSignInClick}>
                   Sign In
                 </button>
               </div>
               <div className="overlay-right">
-                <h1>Register Here!</h1>
-                <p>Enter your details and start your journey.</p>
+                <h1>Don't have an account ?</h1>
                 <button id="signUp" onClick={handleSignUpClick}>
                   Sign Up
                 </button>
