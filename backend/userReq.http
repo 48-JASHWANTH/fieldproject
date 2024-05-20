@@ -1,0 +1,23 @@
+### User API requests
+### User registration
+POST http://localhost:5000/userApi/register
+Content-Type: application/json
+
+{
+    "userId":1,
+    "email":"user@gmail.com",
+    "contactNumber":"9999999999",
+    "password":"user"
+}
+
+### User login
+POST http://localhost:5000/userApi/login
+Content-Type: application/json
+
+{
+    "userId":1,
+    "password":"user"
+}
+
+
+
