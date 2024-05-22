@@ -1,1 +1,17 @@
 ### Admin API requests
+### Admin Login
+POST http://localhost:5000/adminApi/login
+Content-Type: application/json
+
+{
+    "adminId":1,
+    "password":"admin"
+}
+
+###Admin update
+PUT http://localhost:5000/adminApi/approve
+Content-Type: application/json
+
+{
+    ""
+}
