@@ -80,7 +80,7 @@ p {
   margin: 15px 0 20px;
 }
 
-input {
+input:not([type="radio"]) {
   background: #eee;
   padding: 12px 15px;
   margin: 4px 15px;
@@ -88,6 +88,10 @@ input {
   border-radius: 5px;
   border: none;
   outline: none;
+}
+
+input .rad{
+  margin: 4px 15px;
 }
 
 a {
@@ -206,3 +210,27 @@ button:active {
 .sign-up .button {
   padding-bottom: 10px;
 }
+
+
+.dialog-box {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: lightgreen;
+  color: green;
+  padding: 15px 30px; 
+  border: 1px solid rgb(93, 230, 93);
+  border-radius: 5px;
+  z-index: 1000;
+  display: none; 
+  width: 80%; 
+  max-width: 600px; 
+  text-align: center; 
+  font-size: 1.2rem; 
+}
+
+.dialog-box.show {
+  display: block; 
+}
+
