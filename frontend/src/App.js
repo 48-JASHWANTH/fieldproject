@@ -2,8 +2,9 @@ import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LoginRegister from "./components/loginRegister/LoginRegister";
 import ErrorPage from "./components/errorPage/ErrorPage";
-import FacultyRootLayout from './components/facultyRootLayout/FacultyRootLayout'
-import AdminProfile from './components/adminProfile/AdminProfile'
+import CompleteProfile from "./components/completeProfile/CompleteProfile";
+import FacultyPage from "./components/facultyPage/FacultyPage";
+import AdminPage from "./components/adminPage/AdminPage";
 
 function App() {
   let router = createBrowserRouter([
@@ -12,13 +13,17 @@ function App() {
       element: <LoginRegister></LoginRegister>,
       errorElement: <ErrorPage></ErrorPage>,
     },
+    // {
+    //   path: "/CompleteProfile",
+    //   element: <CompleteProfile></CompleteProfile>,
+    // },
     {
-      path: "/FacultyRootLayout",
-      element: <FacultyRootLayout />,
+      path: "/FacultyPage",
+      element: <FacultyPage />,
     },
     {
-      path: "/AdminProfile",
-      element: <AdminProfile />,
+      path: "/AdminPage",
+      element: <AdminPage />,
     },
   ]);
 
