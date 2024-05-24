@@ -9,7 +9,7 @@ require("dotenv").config();
 adminApp.post(
   "/login",
   expressAsyncHandler(async (req, res) => {
-    console.log(req.body)
+    //console.log(req.body)
     const { adminId, password } = req.body;
     //console.log(adminId)
     //console.log(password)

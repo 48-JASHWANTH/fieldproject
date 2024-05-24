@@ -81,10 +81,10 @@ function LoginRegister() {
   useEffect(() => {
     if (loginUserStatus) {
       if (currentUser.userType === "faculty") {
-        navigate("/FacultyRootLayout");
+        navigate("/FacultyPage");
       }
       if (currentUser.userType === "admin") {
-        navigate("/AdminProfile");
+        navigate("/AdminPage");
       }
     }
   }, [loginUserStatus]);

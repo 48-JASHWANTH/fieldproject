@@ -46,7 +46,7 @@ userApp.post(
 userApp.post(
   "/login",
   expressAsyncHandler(async (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     const { facultyId, password } = req.body;
     if (!facultyId || !password) {
       return res.status(400).json({ message: "facultyId and password are required" });
