@@ -21,6 +21,12 @@ const dbConfig = {
     trustServerCertificate: true,
     connectTimeout: 86400000,
   },
+  pool: {
+    min: 2,
+    max: 10,
+    acquireTimeoutMillis: 60000,
+  },
+  debug: true,
 };
 
 async function connectToDatabase() {
