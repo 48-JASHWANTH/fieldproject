@@ -1,9 +1,10 @@
 import React from 'react'
 import './Navbar.css'
+import 'bootstrap/dist/css/bootstrap.css';
 
 function Navbar() {
   return (
-    <div>Navbar</div>
+    <div className='bg-info'>Navbar</div>
   )
 }
 
