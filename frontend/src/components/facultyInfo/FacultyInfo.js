@@ -1,11 +1,12 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Outlet } from "react-router-dom";
+import './FacultyInfo.css'
 
 function FacultyInfo() {
   return (
-    <div className="row">
-      <div className="col-md-2 bg-warning p-3">
+    <div className="d-flex facultyInfoBody">
+      <div className="bg-warning p-3 d-flex flex-column justify-content-around">
         <NavLink className="nav-link" to="FacultyProfile">
           Faculty Profile
         </NavLink>
@@ -40,7 +41,7 @@ function FacultyInfo() {
           Notifications
         </NavLink>
       </div>
-      <div className="col-md-10 p-3">
+      <div className="p-3">
         <Outlet />
       </div>
     </div>

@@ -1,13 +1,8 @@
-@import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
-* {
-  box-sizing: border-box;
-}
-.main {
+.lr-main {
   width: 100%;
   height: 100vh;
 }
-
-.body1 {
+.lr-body1 {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -17,12 +12,11 @@
   justify-content: center;
   align-items: center;
 }
-img {
+.lr-img {
   width: 320px;
   height: 110px;
 }
-
-.container1 {
+.lr-container1 {
   position: relative;
   width: 768px;
   max-width: 100%;
@@ -35,25 +29,23 @@ img {
   overflow: hidden;
 }
 
-.sign-up,
-.sign-in {
+.lr-sign-up,
+.lr-sign-in {
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
   transition: all 0.6s ease-in-out;
 }
-
-.sign-up {
+.lr-sign-up {
   width: 50%;
   opacity: 0;
   z-index: 1;
 }
-.sign-in {
+.lr-sign-in {
   width: 50%;
   z-index: 2;
 }
-
 form {
   background-color: #fff;
   display: flex;
@@ -66,20 +58,6 @@ form {
   height: 100%;
   border-radius: 10px;
 }
-
-h1 {
-  margin-bottom: 10px;
-}
-
-
-p {
-  font-size: 14px;
-  font-weight: 100;
-  line-height: 20px;
-  letter-spacing: 0.5px;
-  margin: 15px 0 20px;
-}
-
 input:not([type="radio"]) {
   background: #eee;
   padding: 12px 15px;
@@ -89,18 +67,6 @@ input:not([type="radio"]) {
   border: none;
   outline: none;
 }
-
-input .rad{
-  margin: 4px 15px;
-}
-
-a {
-  color: #333;
-  font-size: 14px;
-  text-decoration: none;
-  margin: 15px 0;
-}
-
 button {
   color: #fff;
   background-color: grey;
@@ -116,28 +82,20 @@ button {
   transition: transform 80ms ease-in;
   cursor: pointer;
 }
-
 button:active {
   transform: scale(0.9);
 }
 
-#signUp,
-#signIn {
-  background-color: transparent;
-  border: 2px solid #fff;
-}
-
-.container1.right-panel-active .sign-in {
+.lr-container1.right-panel-active .lr-sign-in {
   transform: translateX(100%);
 }
-
-.container1.right-panel-active .sign-up {
+.lr-container1.right-panel-active .lr-sign-up {
   transform: translateX(100%);
   opacity: 1;
   z-index: 5;
 }
 
-.overlay-container1 {
+.lr-overlay-container1 {
   position: absolute;
   top: 0;
   left: 50%;
@@ -147,12 +105,11 @@ button:active {
   transition: transform 0.6s ease-in-out;
   z-index: 100;
 }
-
-.container1.right-panel-active .overlay-container1 {
+.lr-container1.right-panel-active .lr-overlay-container1 {
   transform: translateX(-100%);
 }
 
-.overlay {
+.lr-overlay {
   position: relative;
   color: #fff;
   background: transparent;
@@ -164,13 +121,12 @@ button:active {
   transform: translateX(0);
   transition: transform 0.6s ease-in-out;
 }
-
-.container1.right-panel-active .overlay {
+.lr-container1.right-panel-active .lr-overlay {
   transform: translateX(50%);
 }
 
-.overlay-left,
-.overlay-right {
+.lr-overlay-left,
+.lr-overlay-right {
   position: absolute;
   display: flex;
   justify-content: center;
@@ -185,52 +141,25 @@ button:active {
   transition: transform 0.6s ease-in-out;
 }
 
-.overlay-left {
-  transform: translateX(-20%);
+.lr-overlay-left {
+  transform: translateX(-100%);
+}
+.lr-container1.right-panel-active .lr-overlay-left {
+  transform: translateX(0);
 }
 
-.overlay-right {
+.lr-overlay-right {
   right: 0;
   transform: translateX(0);
 }
-
-.container1.right-panel-active .overlay-left {
-  transform: translateX(0);
+.lr-container1.right-panel-active .lr-overlay-right {
+  transform: translateX(100%);
 }
 
-.container1.right-panel-active .overlay-right {
-  transform: translateX(20%);
-}
-
-.signUpHead {
-  padding-bottom: 10px;
-  font-size: 2rem;
-}
-
-.sign-up .button {
-  padding-bottom: 10px;
-}
-
-
-.dialog-box {
-  position: fixed;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: lightgreen;
-  color: green;
-  padding: 15px 30px; 
-  border: 1px solid rgb(93, 230, 93);
+.lr-dialog-box.show {
+  display: block;
+  background: white;
+  color: black;
+  padding: 10px;
   border-radius: 5px;
-  z-index: 1000;
-  display: none; 
-  width: 80%; 
-  max-width: 600px; 
-  text-align: center; 
-  font-size: 1.2rem; 
 }
-
-.dialog-box.show {
-  display: block; 
-}
-

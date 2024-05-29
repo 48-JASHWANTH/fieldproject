@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import VideoComponent from "../videos/VideoComponent";
 import "./LoginRegister.css";
@@ -29,13 +29,15 @@ function LoginRegister() {
 
   const handleSignUpClick = () => {
     setIsSignUp(true);
-    document.querySelector(".container1").classList.add("right-panel-active");
+    document
+      .querySelector(".lr-container1")
+      .classList.add("right-panel-active");
   };
 
   const handleSignInClick = () => {
     setIsSignUp(false);
     document
-      .querySelector(".container1")
+      .querySelector(".lr-container1")
       .classList.remove("right-panel-active");
   };
 
@@ -49,7 +51,7 @@ function LoginRegister() {
         setDialogMessage(res.data.message);
         setIsSignUp(false);
         document
-          .querySelector(".container1")
+          .querySelector(".lr-container1")
           .classList.remove("right-panel-active");
       }
       resetSignUp();
@@ -94,17 +96,17 @@ function LoginRegister() {
   };
 
   return (
-    <div className="main">
+    <div className="lr-main">
       <VideoComponent />
-      <div className="body1">
-        <div className="container1" id="main">
+      <div className="lr-body1">
+        <div className="lr-container1" id="main">
           {dialogMessage && (
-            <div className="dialog-box show">{dialogMessage}</div>
+            <div className="lr-dialog-box show">{dialogMessage}</div>
           )}
-          <div className="sign-in">
-            <form onSubmit={handleSubmitSignIn(onSignInFormSubmit)}>
-              <img src={vnrlogo} alt="" />
-              <h1 className="signUpHead">Sign In</h1>
+          <div className="lr-sign-in">
+            <form onSubmit={handleSubmitSignIn(onSignInFormSubmit)} >
+              <img src={vnrlogo} alt="" className="lr-img" />
+              <h1 className="lr-signUpHead">Sign In</h1>
               <div className="mb-3">
                 <label className="form-check-label me-3">Sign In as</label>
                 <input
@@ -112,7 +114,7 @@ function LoginRegister() {
                   className="form-check-input me-1 border-dark"
                   id="faculty"
                   value="faculty"
-                  {...registerSignIn('userType')}
+                  {...registerSignIn("userType")}
                   checked={userType === "faculty"}
                   onChange={handleUserTypeChange}
                   required
@@ -125,7 +127,7 @@ function LoginRegister() {
                   className="form-check-input me-1 border-dark"
                   id="admin"
                   value="admin"
-                  {...registerSignIn('userType')}
+                  {...registerSignIn("userType")}
                   checked={userType === "admin"}
                   onChange={handleUserTypeChange}
                   required
@@ -141,7 +143,8 @@ function LoginRegister() {
                 required
                 {...(userType === "admin"
                   ? registerSignIn("adminId")
-                  : registerSignIn("facultyId"))}
+                  : registerSignIn("faculty_id"))}
+                className="lr-input"
               />
               <input
                 type="password"
@@ -149,21 +152,25 @@ function LoginRegister() {
                 placeholder="Password"
                 required
                 {...registerSignIn("password")}
+                className="lr-input"
               />
-              <a href="#">Forgot your Password?</a>
-              <button>Sign In</button>
+              <a href="#" className="lr-a">
+                Forgot your Password?
+              </a>
+              <button className="lr-button">Sign In</button>
             </form>
           </div>
-          <div className="sign-up">
+          <div className="lr-sign-up">
             <form onSubmit={handleSubmitSignUp(onSignUpFormSubmit)}>
-              <img src={vnrlogo} alt="" />
-              <h1 className="signUpHead">Sign Up</h1>
+              <img src={vnrlogo} alt="" className="lr-img" />
+              <h1 className="lr-signUpHead">Sign Up</h1>
               <input
                 type="text"
-                id="facultyId"
+                id="faculty_id"
                 placeholder="Faculty ID"
                 required
-                {...registerSignUp("facultyId")}
+                {...registerSignUp("faculty_id")}
+                className="lr-input"
               />
               <input
                 type="email"
@@ -171,6 +178,7 @@ function LoginRegister() {
                 placeholder="Email"
                 required
                 {...registerSignUp("email")}
+                className="lr-input"
               />
               <input
                 type="tel"
@@ -178,6 +186,7 @@ function LoginRegister() {
                 placeholder="Contact number"
                 required
                 {...registerSignUp("contactNumber")}
+                className="lr-input"
               />
               <input
                 type="password"
@@ -185,21 +194,30 @@ function LoginRegister() {
                 placeholder="Password"
                 required
                 {...registerSignUp("password")}
+                className="lr-input"
               />
-              <button>Sign Up</button>
+              <button className="lr-button">Sign Up</button>
             </form>
           </div>
-          <div className="overlay-container1">
-            <div className="overlay">
-              <div className="overlay-left">
-                <h1>Already have an account ?</h1>
-                <button id="signIn" onClick={handleSignInClick}>
+          <div className="lr-overlay-container1">
+            <div className="lr-overlay">
+              <div className="lr-overlay-left">
+                <h1>Already have an account?</h1>
+                <button
+                  id="signIn"
+                  onClick={handleSignInClick}
+                  className="lr-button"
+                >
                   Sign In
                 </button>
               </div>
-              <div className="overlay-right">
-                <h1>Don't have an account ?</h1>
-                <button id="signUp" onClick={handleSignUpClick}>
+              <div className="lr-overlay-right">
+                <h1>Don't have an account?</h1>
+                <button
+                  id="signUp"
+                  onClick={handleSignUpClick}
+                  className="lr-button"
+                >
                   Sign Up
                 </button>
               </div>

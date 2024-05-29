@@ -52,7 +52,7 @@ export const userAdminSlice = createSlice({
       .addCase(userAdminLoginThunk.fulfilled, (state, action) => {
         state.isPending = false;
         state.loginUserStatus = true;
-        state.currentUser = action.payload.user // Ensure payload has user property
+        state.currentUser = action.payload.user 
         state.errorOccurred = false;
         state.errorMessage = "";
       })
