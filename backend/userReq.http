@@ -4,7 +4,7 @@ POST http://localhost:5000/userApi/register
 Content-Type: application/json
 
 {
-    "facultyId":"9",
+    "faculty_id":"9",
     "email":"user@gmail.com",
     "contactNumber":"9999999999",
     "password":"admin",
@@ -17,9 +17,208 @@ POST http://localhost:5000/userApi/login
 Content-Type: application/json
 
 {
-    "facultyId":9,
-    "password":"admin"
+    "faculty_id":"1",
+    "password":"faculty"
 }
 
 
+###User basicInfo    
+POST http://localhost:5000/userApi/basicInfo
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYWN1bHR5X2lkIjoiMSIsImlhdCI6MTcxNjg5ODE4NCwiZXhwIjoxNzE2OTg0NTg0fQ.BMVqLpjToEH7GxRgQqm2v8h43Hn-khSWCfSRpjvwovI
 
+{
+"faculty_id": "1",
+"faculty_name": "John Doe",
+"faculty_displayname": "J. Doe",
+"faculty_email": "johndoe@example.com",
+"faculty_phno": "1234567890",
+"faculty_phno1": "0987654321",
+"faculty_econtact": "1122334455",
+"faculty_gender": "Male",
+"faculty_dob": "{{$datetime iso8601}}",
+"faculty_age":50,
+"faculty_placeOfBirth": "California",
+"faculty_dateOfRetirement":"{{$datetime iso8601}}",
+"faculty_state": "California",
+"faculty_maritalStatus": "Married",
+"faculty_bloodGroup": "O+",
+"faculty_nationality": "American",
+"faculty_religion": "Christianity",
+"faculty_caste": "General",
+"faculty_dateOfJoining": "{{$datetime iso8601}}",
+"faculty_dateOfResignation": "{{$datetime iso8601}}",
+"faculty_address": "123 Main St, Los Angeles, CA",
+"faculty_relieveType": "Voluntary",
+"faculty_relieveReason": "N/A",
+"faculty_workLocation": "Los Angeles Campus",
+"faculty_dept": "Computer Science",
+"faculty_manager1": "Jane Smith",
+"faculty_manager2": "Robert Brown",
+"faculty_emp_type": "Teaching",
+"faculty_shift": "Regular",
+"faculty_status": "Existing",
+"faculty_phc": 0,
+"faculty_healthInsurance": 1,
+"faculty_designation": "Associate Professor"
+}
+
+###User Publications
+POST http://localhost:5000/userApi/Publications
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYWN1bHR5X2lkIjoiMSIsImlhdCI6MTcxNjg5ODE4NCwiZXhwIjoxNzE2OTg0NTg0fQ.BMVqLpjToEH7GxRgQqm2v8h43Hn-khSWCfSRpjvwovI
+
+{
+  "publicationId": "12345",
+  "faculty_id": "1",
+  "faculty_name": "John Doe",
+  "designation": "Associate Professor",
+  "dept": "Computer Science",
+  "publicationType": "Journal",
+  "publicationTitle": "Innovative Research in AI",
+  "Author_ID1": "A1",
+  "Author_ID2": "A2",
+  "Author_ID3": "A3",
+  "Author_ID4": "A4",
+  "Author_ID5": "A5",
+  "Author_ID6": "A6",
+  "Author_ID7": "A7",
+  "conferenceName": "International Conference on AI",
+  "VolumeNumber": "10",
+  "PageNumber": "100-110",
+  "issueNumber": "2",
+  "levelOfCirculation": "International",
+  "journalName": "Journal of AI Research",
+  "dateOfPublication": "2023-05-28",
+  "indexedIn": "Scopus",
+  "indexProof": "indexProof.pdf",
+  "ISSNISBNnumber": "1234-5678",
+  "impactFactor": "4.5",
+  "scopus": 1,
+  "webOfScience": 0,
+  "SCI": 1,
+  "GoogleScholar": 1,
+  "UGCRated": 0,
+  "ugcProof": "ugcProof.pdf",
+  "hindex": "20",
+  "citationCnt": "150",
+  "affiliatingInstitute": "XYZ University",
+  "publisherName": "ABC Publishing",
+  "paperLink": "http://example.com/paper",
+  "journalLink": "http://example.com/journal",
+  "proof": "proof.pdf",
+  "orcid_id": "0000-0001-2345-6789",
+  "scopus_id": "123456789",
+  "vidwan_id": "987654321",
+  "googleScholar_id": "GS123456",
+  "technology": "Artificial Intelligence",
+  "domain": "Machine Learning",
+  "branch": "Computer Science",
+  "industry": "Education",
+  "foreignAuthor": 1,
+  "publicationStatus": "Published",
+  "studentPresence": 0
+}
+
+
+###User Projects
+POST http://localhost:5000/userApi/Projects
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYWN1bHR5X2lkIjoiMSIsImlhdCI6MTcxNjg5ODE4NCwiZXhwIjoxNzE2OTg0NTg0fQ.BMVqLpjToEH7GxRgQqm2v8h43Hn-khSWCfSRpjvwovI
+
+{
+  "project_id": "P12345",
+  "project_type": "Major",
+  "faculty_id": "1",
+  "author_ID1": "A1",
+  "author_ID2": "A2",
+  "author_ID3": "A3",
+  "dept": "Computer Science",
+  "branch": "Software Engineering",
+  "foreign_": 1,
+  "proofs": "proof.pdf",
+  "sponsors": "XYZ Corporation",
+  "industry": "Education",
+  "title": "AI in Education",
+  "appliedDate": "2023-05-28",
+  "dateofSanction": "2023-06-28",
+  "domain": "Artificial Intelligence",
+  "studentPresence": 1,
+  "funded": 1,
+  "fundingOrganization": "National Science Foundation",
+  "budget": "50000",
+  "status": "Approved"
+}
+
+###User Patents
+POST http://localhost:5000/userApi/Patents
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYWN1bHR5X2lkIjoiMSIsImlhdCI6MTcxNjg5ODE4NCwiZXhwIjoxNzE2OTg0NTg0fQ.BMVqLpjToEH7GxRgQqm2v8h43Hn-khSWCfSRpjvwovI
+
+{
+  "patentId": "PAT12345",
+  "faculty_name": "John Doe",
+  "faculty_id": "1",
+  "designation": "Associate Professor",
+  "dept": "Computer Science",
+  "patentType": "Utility",
+  "title": "Innovative AI Patent",
+  "Author_ID1": "A1",
+  "Author_ID2": "A2",
+  "Author_ID3": "A3",
+  "Author_ID4": "A4",
+  "Author_ID5": "A5",
+  "Author_ID6": "A6",
+  "Author_ID7": "A7",
+  "Author_ID8": "A8",
+  "Author_ID9": "A9",
+  "Author_ID10": "A10",
+  "dateOfSubmission": "2023-01-15",
+  "dateOfPublication": "2023-05-28",
+  "dateOfGranting": "2023-06-28",
+  "foreign_": 1,
+  "industry": "Technology",
+  "technology": "Artificial Intelligence",
+  "studentPresence": 1,
+  "domain": "Machine Learning",
+  "proof": "proof.pdf",
+  "publisherName": "Patent Office",
+  "patentStatus": "Approved"
+}
+
+###User Nominations
+POST http://localhost:5000/userApi/Nomination
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYWN1bHR5X2lkIjoiMSIsImlhdCI6MTcxNjg5ODE4NCwiZXhwIjoxNzE2OTg0NTg0fQ.BMVqLpjToEH7GxRgQqm2v8h43Hn-khSWCfSRpjvwovI
+
+{
+  "faculty_id": "1",
+  "nomine_name": "John Doe",
+  "nomine_relation": "Spouse",
+  "nomine_percentage": "50%",
+  "nomine_dateOfBirth": "1975-06-15",
+  "nomine_contiguencyOfHappening": "Natural",
+  "nomine_address": "123 Main St, City, Country",
+  "nomine_remarks": "None",
+  "nomine_aadharNumber": "1234 5678 9012",
+  "nomine_id": "NOM12345"
+}
+
+###User Authors
+POST http://localhost:5000/userApi/Authors
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYWN1bHR5X2lkIjoiMSIsImlhdCI6MTcxNjg5ODE4NCwiZXhwIjoxNzE2OTg0NTg0fQ.BMVqLpjToEH7GxRgQqm2v8h43Hn-khSWCfSRpjvwovI
+
+{
+  "author_name": "John Doe",
+  "author_ID": "A123",
+  "author_institute": "XYZ University",
+  "author_email": "johndoe@example.com",
+  "author_phno": "1234567890",
+  "author_gender": "Male",
+  "is_author_from_industry":0,
+  "author_state": "California",
+  "author_country": "USA",
+  "is_author_student": 1,
+  "is_author_foreign": 0
+}

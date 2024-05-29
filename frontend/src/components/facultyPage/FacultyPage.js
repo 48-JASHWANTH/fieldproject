@@ -1,17 +1,17 @@
 import React from "react";
 import "./FacultyPage.css";
-import NavBar from '../navbar/Navbar'
+import MainNavBar from "../mainNavBar/MainNavBar";
 import Footer from "../footer/Footer";
-import {Outlet} from 'react-router-dom'
+import { Outlet } from "react-router-dom";
 
 function FacultyPage() {
   return (
     <div className="fp-body">
-      <NavBar />
-      <div style={{ minHeight: "82vh" }} className="outlet-div">
+      <MainNavBar />
+      <div style={{ minHeight: "90.2vh" }} className="outlet-div">
         <Outlet />
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

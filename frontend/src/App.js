@@ -22,8 +22,9 @@ import CollaborationTemp from './components/others/CollaborationTemp'
 import ConsultancyTemp from './components/others/ConsultancyTemp'
 import FundedProjectsTemp from './components/others/FundedProjectsTemp'
 import NotificationTemp from './components/others/NotificationTemp'
-import PatentsTemp from './components/others/NotificationTemp';
+import PatentsTemp from './components/others/PatentsTemp';
 import PublicationsTemp from './components/others/PublicationsTemp';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   let router = createBrowserRouter([

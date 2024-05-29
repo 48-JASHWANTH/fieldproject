@@ -1,0 +1,11 @@
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    text-align: left;
+}
+
+input:not([type=radio]){
+    margin: 0 0;
+}
