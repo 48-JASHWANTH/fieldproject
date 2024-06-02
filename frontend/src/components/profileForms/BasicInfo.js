@@ -1,7 +1,9 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './Forms.css'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./Forms.css";
+import { axiosWithToken } from "../../axiosWithToken";
+import { useNavigate } from "react-router-dom";
 
 const BasicInfo = () => {
   const {
@@ -10,13 +12,36 @@ const BasicInfo = () => {
     formState: { errors },
   } = useForm();
 
-  function onSubmit(data){
+  const navigate = useNavigate();
+  const [dialogMessage, setDialogMessage] = useState("");
+
+  useEffect(() => {
+    if (dialogMessage) {
+      const timer = setTimeout(() => {
+        setDialogMessage("");
+      }, 7000);
+      return () => clearTimeout(timer);
+    }
+  }, [dialogMessage]);
+
+  async function onSubmit(data) {
     console.log(data);
-  };
+    let res = await axiosWithToken.post(
+      "http://localhost:5000/userApi/BasicInfo",
+      data
+    );
+    console.log(res.status);
+    if (res.status === 200) {
+      setDialogMessage(res.data.message);
+      navigate("/FacultyPage/CompleteProfile/Publications");
+    }
+  }
 
   return (
     <div className="container mt-5 shadow-lg p-3 mb-5 bg-white rounded">
+      {dialogMessage && <div className="dialog-box show">{dialogMessage}</div>}
       <h2 className="form-heading mb-4">BasicInfo</h2>
+      {dialogMessage && <div className="dialog-box show">{dialogMessage}</div>}
       <form onSubmit={handleSubmit(onSubmit)} className="container mt-4">
         <div className="row mb-3">
           <div className="col-md-4">
@@ -137,9 +162,14 @@ const BasicInfo = () => {
                 errors.faculty_gender ? "is-invalid" : ""
               }`}
               id="faculty_gender"
+              defaultValue=""
             >
-              <option value="">Select Gender</option>
-              {/* Add options for gender */}
+              <option value="" disabled>
+                -- Select Gender --
+              </option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
             </select>
             {errors.faculty_gender && (
               <div className="invalid-feedback">Gender is required</div>
@@ -173,7 +203,6 @@ const BasicInfo = () => {
               {...register("faculty_age")}
               className="form-control"
               id="faculty_age"
-              readOnly
             />
           </div>
           {/* Add calculated age based on date of birth */}
@@ -212,9 +241,39 @@ const BasicInfo = () => {
                 errors.faculty_state ? "is-invalid" : ""
               }`}
               id="faculty_state"
+              defaultValue=""
             >
-              <option value="">Select State</option>
-              {/* Add options for state */}
+              <option value="" disabled>
+                -- Select State --
+              </option>
+              <option value="Andhra Pradesh">Andhra Pradesh</option>
+              <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+              <option value="Assam">Assam</option>
+              <option value="Bihar">Bihar</option>
+              <option value="Chhattisgarh">Chhattisgarh</option>
+              <option value="Goa">Goa</option>
+              <option value="Gujarat">Gujarat</option>
+              <option value="Haryana">Haryana</option>
+              <option value="Himachal Pradesh">Himachal Pradesh</option>
+              <option value="Jharkhand">Jharkhand</option>
+              <option value="Karnataka">Karnataka</option>
+              <option value="Kerala">Kerala</option>
+              <option value="Madhya Pradesh">Madhya Pradesh</option>
+              <option value="Maharashtra">Maharashtra</option>
+              <option value="Manipur">Manipur</option>
+              <option value="Meghalaya">Meghalaya</option>
+              <option value="Mizoram">Mizoram</option>
+              <option value="Nagaland">Nagaland</option>
+              <option value="Odisha">Odisha</option>
+              <option value="Punjab">Punjab</option>
+              <option value="Rajasthan">Rajasthan</option>
+              <option value="Sikkim">Sikkim</option>
+              <option value="Tamil Nadu">Tamil Nadu</option>
+              <option value="Telangana">Telangana</option>
+              <option value="Tripura">Tripura</option>
+              <option value="Uttar Pradesh">Uttar Pradesh</option>
+              <option value="Uttarakhand">Uttarakhand</option>
+              <option value="West Bengal">West Bengal</option>
             </select>
             {errors.faculty_state && (
               <div className="invalid-feedback">State is required</div>
@@ -230,9 +289,13 @@ const BasicInfo = () => {
                 errors.faculty_maritalStatus ? "is-invalid" : ""
               }`}
               id="faculty_maritalStatus"
+              defaultValue=""
             >
-              <option value="">Select Marital Status</option>
-              {/* Add options for marital status */}
+              <option value="" disabled>
+                -- Select Status --
+              </option>
+              <option value="Married">Married</option>
+              <option value="Not married">Not married</option>
             </select>
             {errors.faculty_maritalStatus && (
               <div className="invalid-feedback">Marital status is required</div>
@@ -248,9 +311,19 @@ const BasicInfo = () => {
                 errors.faculty_bloodGroup ? "is-invalid" : ""
               }`}
               id="faculty_bloodGroup"
+              defaultValue=""
             >
-              <option value="">Select Blood Group</option>
-              {/* Add options for blood group */}
+              <option value="" disabled>
+                -- Select Blood Group --
+              </option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
             </select>
             {errors.faculty_bloodGroup && (
               <div className="invalid-feedback">Blood group is required</div>
@@ -269,9 +342,21 @@ const BasicInfo = () => {
                 errors.faculty_nationality ? "is-invalid" : ""
               }`}
               id="faculty_nationality"
+              defaultValue=""
             >
-              <option value="">Select Nationality</option>
-              {/* Add options for nationality */}
+              <option value="" disabled>
+                -- Select Nationality --
+              </option>
+              <option value="Indian">Indian</option>
+              <option value="American">American</option>
+              <option value="British">British</option>
+              <option value="Canadian">Canadian</option>
+              <option value="Australian">Australian</option>
+              <option value="Chinese">Chinese</option>
+              <option value="Japanese">Japanese</option>
+              <option value="German">German</option>
+              <option value="French">French</option>
+              <option value="Italian">Italian</option>
             </select>
             {errors.faculty_nationality && (
               <div className="invalid-feedback">Nationality is required</div>
@@ -287,9 +372,21 @@ const BasicInfo = () => {
                 errors.faculty_religion ? "is-invalid" : ""
               }`}
               id="faculty_religion"
+              defaultValue=""
             >
-              <option value="">Select Religion</option>
-              {/* Add options for religion */}
+              <option value="" disabled>
+                -- Select Religion --
+              </option>
+              <option value="Hinduism">Hinduism</option>
+              <option value="Islam">Islam</option>
+              <option value="Christianity">Christianity</option>
+              <option value="Sikhism">Sikhism</option>
+              <option value="Buddhism">Buddhism</option>
+              <option value="Jainism">Jainism</option>
+              <option value="Zoroastrianism">Zoroastrianism</option>
+              <option value="Judaism">Judaism</option>
+              <option value="Bahá'í">Bahá'í</option>
+              <option value="Other">Other</option>
             </select>
             {errors.faculty_religion && (
               <div className="invalid-feedback">Religion is required</div>
@@ -305,9 +402,15 @@ const BasicInfo = () => {
                 errors.faculty_caste ? "is-invalid" : ""
               }`}
               id="faculty_caste"
+              defaultValue=""
             >
-              <option value="">Select Caste</option>
-              {/* Add options for caste */}
+              <option value="" disabled>
+                -- Select Caste --
+              </option>
+              <option value="General">General</option>
+              <option value="OBC">OBC</option>
+              <option value="SC">SC</option>
+              <option value="ST">ST</option>
             </select>
             {errors.faculty_caste && (
               <div className="invalid-feedback">Caste is required</div>
@@ -370,7 +473,7 @@ const BasicInfo = () => {
               <input
                 type="checkbox"
                 {...register("faculty_relieveType")}
-                className="form-check-input"
+                className="form-check-input radiooInput"
                 id="faculty_relieveType"
               />
               <label className="form-check-label" htmlFor="faculty_relieveType">
@@ -454,9 +557,13 @@ const BasicInfo = () => {
                 errors.faculty_empType ? "is-invalid" : ""
               }`}
               id="faculty_empType"
+              defaultValue=""
             >
-              <option value="">Select Employee Type</option>
-              {/* Add options for employee type */}
+              <option value="" disabled>
+                -- Select Type --
+              </option>
+              <option value="Teaching">Teaching</option>
+              <option value="Non-Teaching">Non-Teaching</option>
             </select>
             {errors.faculty_empType && (
               <div className="invalid-feedback">Employee type is required</div>
@@ -472,9 +579,13 @@ const BasicInfo = () => {
                 errors.faculty_shift ? "is-invalid" : ""
               }`}
               id="faculty_shift"
+              defaultValue=""
             >
-              <option value="">Select Shift</option>
-              {/* Add options for shift */}
+              <option value="" disabled>
+                -- Select Shift --
+              </option>
+              <option value="Regular">Regular</option>
+              <option value="Late">Late</option>
             </select>
             {errors.faculty_shift && (
               <div className="invalid-feedback">Shift is required</div>
@@ -490,9 +601,13 @@ const BasicInfo = () => {
                 errors.faculty_status ? "is-invalid" : ""
               }`}
               id="faculty_status"
+              defaultValue=""
             >
-              <option value="">Select Status</option>
-              {/* Add options for status */}
+              <option value="" disabled>
+                -- Select Status --
+              </option>
+              <option value="Existing">Existing</option>
+              <option value="Relieved">Relieved</option>
             </select>
             {errors.faculty_status && (
               <div className="invalid-feedback">Status is required</div>
@@ -507,7 +622,7 @@ const BasicInfo = () => {
               <input
                 type="checkbox"
                 {...register("faculty_phc")}
-                className="form-check-input"
+                className="form-check-input radiooInput"
                 id="faculty_phc"
               />
               <label className="form-check-label" htmlFor="faculty_phc">
@@ -525,7 +640,7 @@ const BasicInfo = () => {
               <input
                 type="checkbox"
                 {...register("faculty_healthInsurance")}
-                className="form-check-input"
+                className="form-check-input radiooInput"
                 id="faculty_healthInsurance"
               />
               <label
@@ -554,9 +669,14 @@ const BasicInfo = () => {
                 errors.faculty_designation ? "is-invalid" : ""
               }`}
               id="faculty_designation"
+              defaultValue=""
             >
-              <option value="">Select Designation</option>
-              {/* Add options for designation */}
+              <option value="" disabled>
+                -- Select Designation --
+              </option>
+              <option value="Assistant">Assistant</option>
+              <option value="Associate">Associate</option>
+              <option value="Professor">Professor</option>
             </select>
             {errors.faculty_designation && (
               <div className="invalid-feedback">Designation is required</div>

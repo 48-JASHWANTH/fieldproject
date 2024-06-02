@@ -1,7 +1,9 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './Forms.css'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./Forms.css";
+import { axiosWithToken } from "../../axiosWithToken";
+import { useNavigate } from "react-router-dom";
 
 const Nomination = () => {
   const {
@@ -10,8 +12,33 @@ const Nomination = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const navigate = useNavigate();
+  const [dialogMessage, setDialogMessage] = useState("");
+
+  useEffect(() => {
+    if (dialogMessage) {
+      const timer = setTimeout(() => {
+        setDialogMessage("");
+      }, 7000);
+      return () => clearTimeout(timer);
+    }
+  }, [dialogMessage]);
+
+  async function onSubmit(data) {
     console.log(data);
+    let res = await axiosWithToken.post(
+      "http://localhost:5000/userApi/Nomination",
+      data
+    );
+    console.log(res.status);
+    if (res.status === 200) {
+      setDialogMessage(res.data.message);
+      navigate("/FacultyPage/CompleteProfile/Authors");
+    }
+  }
+
+  const handlePrev = () => {
+    navigate("/FacultyPage/CompleteProfile/Patents");
   };
 
   return (
@@ -26,7 +53,9 @@ const Nomination = () => {
             <input
               type="text"
               {...register("faculty_id", { required: true })}
-              className={`form-control ${errors.faculty_id ? "is-invalid" : ""}`}
+              className={`form-control ${
+                errors.faculty_id ? "is-invalid" : ""
+              }`}
               id="faculty_id"
             />
             {errors.faculty_id && (
@@ -203,8 +232,12 @@ const Nomination = () => {
           </div>
         </div>
 
-        <div className="d-flex justify-content-between">
-          <button type="button" className="btn btn-success">
+        <div className="nav-buttons d-flex justify-content-between">
+          <button
+            type="button"
+            onClick={handlePrev}
+            className="btn btn-success"
+          >
             Prev
           </button>
           <button type="submit" className="btn btn-success">

@@ -42,8 +42,9 @@ function LoginRegister() {
   };
 
   async function onSignUpFormSubmit(userCredentials) {
+    let res;
     try {
-      let res = await axios.post(
+      res = await axios.post(
         "http://localhost:5000/userApi/register",
         userCredentials
       );
@@ -56,7 +57,11 @@ function LoginRegister() {
       }
       resetSignUp();
     } catch (err) {
-      setDialogMessage("Sign up failed. Please try again.");
+      if(err.response.status === 403){
+        setDialogMessage(err.response.data.message);
+      }else{
+        setDialogMessage("Sign Up failed !");
+      }
     }
   }
 
@@ -101,12 +106,15 @@ function LoginRegister() {
       <div className="lr-body1">
         <div className="lr-container1" id="main">
           {dialogMessage && (
-            <div className="lr-dialog-box show">{dialogMessage}</div>
+            <div className="dialog-box show">{dialogMessage}</div>
           )}
           <div className="lr-sign-in">
-            <form onSubmit={handleSubmitSignIn(onSignInFormSubmit)} >
+            <form
+              onSubmit={handleSubmitSignIn(onSignInFormSubmit)}
+              className="align-items-center"
+            >
               <img src={vnrlogo} alt="" className="lr-img" />
-              <h1 className="lr-signUpHead">Sign In</h1>
+              <h1 className="lr-signUpHead mb-2">Sign In</h1>
               <div className="mb-3">
                 <label className="form-check-label me-3">Sign In as</label>
                 <input
@@ -144,7 +152,7 @@ function LoginRegister() {
                 {...(userType === "admin"
                   ? registerSignIn("adminId")
                   : registerSignIn("faculty_id"))}
-                className="lr-input"
+                className="lr-input m-1 rounded-3"
               />
               <input
                 type="password"
@@ -152,16 +160,19 @@ function LoginRegister() {
                 placeholder="Password"
                 required
                 {...registerSignIn("password")}
-                className="lr-input"
+                className="lr-input m-1 rounded-3"
               />
               <a href="#" className="lr-a">
                 Forgot your Password?
               </a>
-              <button className="lr-button">Sign In</button>
+              <button className="lr-button m-2 rounded-5">Sign In</button>
             </form>
           </div>
           <div className="lr-sign-up">
-            <form onSubmit={handleSubmitSignUp(onSignUpFormSubmit)}>
+            <form
+              onSubmit={handleSubmitSignUp(onSignUpFormSubmit)}
+              className="align-items-center"
+            >
               <img src={vnrlogo} alt="" className="lr-img" />
               <h1 className="lr-signUpHead">Sign Up</h1>
               <input
@@ -170,7 +181,7 @@ function LoginRegister() {
                 placeholder="Faculty ID"
                 required
                 {...registerSignUp("faculty_id")}
-                className="lr-input"
+                className="lr-input m-1 rounded-4"
               />
               <input
                 type="email"
@@ -178,7 +189,7 @@ function LoginRegister() {
                 placeholder="Email"
                 required
                 {...registerSignUp("email")}
-                className="lr-input"
+                className="lr-input m-1 rounded-4"
               />
               <input
                 type="tel"
@@ -186,7 +197,7 @@ function LoginRegister() {
                 placeholder="Contact number"
                 required
                 {...registerSignUp("contactNumber")}
-                className="lr-input"
+                className="lr-input m-1 rounded-4"
               />
               <input
                 type="password"
@@ -194,9 +205,9 @@ function LoginRegister() {
                 placeholder="Password"
                 required
                 {...registerSignUp("password")}
-                className="lr-input"
+                className="lr-input m-1 rounded-4"
               />
-              <button className="lr-button">Sign Up</button>
+              <button className="lr-button m-1 rounded-5">Sign Up</button>
             </form>
           </div>
           <div className="lr-overlay-container1">
@@ -206,7 +217,7 @@ function LoginRegister() {
                 <button
                   id="signIn"
                   onClick={handleSignInClick}
-                  className="lr-button"
+                  className="lr-button rounded-5"
                 >
                   Sign In
                 </button>
@@ -216,7 +227,7 @@ function LoginRegister() {
                 <button
                   id="signUp"
                   onClick={handleSignUpClick}
-                  className="lr-button"
+                  className="lr-button rounded-5"
                 >
                   Sign Up
                 </button>

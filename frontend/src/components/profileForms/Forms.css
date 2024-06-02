@@ -9,3 +9,34 @@ form{
 input:not([type=radio]){
     margin: 0 0;
 }
+
+.radiooInput{
+    width: 1em !important;
+    height: 1em !important;
+    float: left !important;
+    margin-top: .25em !important;
+    border: 1px solid gray !important;
+    margin-right: 8px !important;
+}
+
+.dialog-box {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: lightgreen;
+    color: green;
+    padding: 15px 30px; 
+    border: 1px solid rgb(93, 230, 93);
+    border-radius: 5px;
+    z-index: 1000;
+    display: none; 
+    width: 80%; 
+    max-width: 600px; 
+    text-align: center; 
+    font-size: 1.2rem; 
+  }
+  
+  .dialog-box.show {
+    display: block; 
+  }

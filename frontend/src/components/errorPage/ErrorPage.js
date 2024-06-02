@@ -3,7 +3,7 @@ import './ErrorPage.css'
 
 function ErrorPage() {
   return (
-    <div>ErrorPage</div>
+    <div className='fs-1 text-center text-danger'>ERROR PAGE</div>
   )
 }
 

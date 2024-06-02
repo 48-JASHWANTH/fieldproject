@@ -8,10 +8,19 @@ Content-Type: application/json
     "password":"admin"
 }
 
+###All users
+GET http://localhost:5000/adminApi/users
+
 ###Admin update
 PUT http://localhost:5000/adminApi/approve
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwiaWF0IjoxNzE3MDc2MzE0LCJleHAiOjE3MTcxNjI3MTR9.6boKNqwx_Y-wZ0WCiVqvY0Sf0fgYOoeg45-5zLuqm5I
 
 {
-    ""
+    "faculty_id":"2",
+    "email":"faculty2@gmail.com",
+    "contactNumber":"9999999999",
+    "password":"faculty2",
+    "approveStatus":0,
+    "userType":"faculty"
 }

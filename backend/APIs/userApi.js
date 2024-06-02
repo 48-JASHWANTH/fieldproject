@@ -22,7 +22,7 @@ userApp.post(
     SELECT faculty_id FROM facultyTable WHERE faculty_id = '${faculty_id}'
     `);
     if (checkUser.recordset.length > 0) {
-      return res.status(409).json({
+      return res.status(403).json({
         message:
           "faculty_id already exists ! Please try again with new faculty_id",
       });
@@ -95,9 +95,10 @@ userApp.post(
 
 //User basicInfo
 userApp.post(
-  "/basicInfo",
+  "/BasicInfo",
   verifyToken,
   expressAsyncHandler(async (req, res) => {
+    console.log(req);
     let {
       faculty_id,
       faculty_name,
@@ -144,6 +145,11 @@ userApp.post(
     faculty_dateOfRetirement = faculty_dateOfRetirement
       ? moment(faculty_dateOfRetirement, "YYYY-MM-DD").format("YYYY-MM-DD")
       : null;
+
+    faculty_relieveType = faculty_relieveType ? 1 : 0;
+    faculty_phc = faculty_phc ? 1 : 0;
+    faculty_healthInsurance = faculty_healthInsurance ? 1 : 0;
+    faculty_age = +faculty_age;
 
     try {
       const pool = req.app.get("dbPool");
@@ -222,7 +228,7 @@ userApp.post(
       `;
 
       await request.query(query);
-      res.status(200).send("Data inserted successfully");
+      res.status(200).send("Basic information saved successfully !!");
     } catch (err) {
       console.error("SQL error:", err);
       res.status(500).send("Error inserting data");
@@ -232,7 +238,7 @@ userApp.post(
 
 //User publications
 userApp.post(
-  "/publications",
+  "/Publications",
   verifyToken,
   expressAsyncHandler(async (req, res) => {
     let {
@@ -290,6 +296,14 @@ userApp.post(
     dateOfPublication = moment(dateOfPublication, "YYYY-MM-DD").format(
       "YYYY-MM-DD"
     );
+
+    scopus = scopus==="Yes" ? 1 : 0;
+    webOfScience = webOfScience==="Yes" ? 1 : 0;
+    SCI = SCI==="Yes" ? 1 : 0;
+    GoogleScholar = GoogleScholar="Yes" ? 1 : 0;
+    UGCRated = UGCRated==="Yes" ? 1 : 0;
+    foreignAuthor = foreignAuthor==="Yes" ? 1 : 0;
+    studentPresence = studentPresence==="Yes" ? 1 : 0;
 
     try {
       const pool = req.app.get("dbPool");
@@ -434,11 +448,15 @@ userApp.post(
       funded,
       fundingOrganization,
       budget,
-      status
+      status,
     } = req.body;
 
     appliedDate = moment(appliedDate, "YYYY-MM-DD").format("YYYY-MM-DD");
     dateofSanction = moment(dateofSanction, "YYYY-MM-DD").format("YYYY-MM-DD");
+
+    foreign_ = foreign_==="Yes" ? 1 : 0;
+    studentPresence = studentPresence==="Yes" ? 1 : 0;
+    funded = funded==="Yes" ? 1 : 0;
 
     try {
       const pool = req.app.get("dbPool");
@@ -501,7 +519,6 @@ userApp.post(
   })
 );
 
-
 //User patents
 userApp.post(
   "/Patents",
@@ -535,12 +552,19 @@ userApp.post(
       domain,
       proof,
       publisherName,
-      patentStatus
+      patentStatus,
     } = req.body;
 
-    dateOfSubmission = moment(dateOfSubmission, "YYYY-MM-DD").format("YYYY-MM-DD");
-    dateOfPublication = moment(dateOfPublication, "YYYY-MM-DD").format("YYYY-MM-DD");
+    dateOfSubmission = moment(dateOfSubmission, "YYYY-MM-DD").format(
+      "YYYY-MM-DD"
+    );
+    dateOfPublication = moment(dateOfPublication, "YYYY-MM-DD").format(
+      "YYYY-MM-DD"
+    );
     dateOfGranting = moment(dateOfGranting, "YYYY-MM-DD").format("YYYY-MM-DD");
+
+    foreign_ = foreign_==="Yes" ? 1 : 0;
+    studentPresence = studentPresence==="Yes" ? 1 : 0;
 
     try {
       const pool = req.app.get("dbPool");
@@ -617,7 +641,6 @@ userApp.post(
   })
 );
 
-
 //User nominations
 userApp.post(
   "/Nomination",
@@ -633,10 +656,12 @@ userApp.post(
       nomine_address,
       nomine_remarks,
       nomine_aadharNumber,
-      nomine_id
+      nomine_id,
     } = req.body;
 
-    nomine_dateOfBirth = moment(nomine_dateOfBirth, "YYYY-MM-DD").format("YYYY-MM-DD");
+    nomine_dateOfBirth = moment(nomine_dateOfBirth, "YYYY-MM-DD").format(
+      "YYYY-MM-DD"
+    );
 
     try {
       const pool = req.app.get("dbPool");
@@ -677,7 +702,6 @@ userApp.post(
   })
 );
 
-
 //User authors
 userApp.post(
   "/Authors",
@@ -694,8 +718,12 @@ userApp.post(
       author_state,
       author_country,
       is_author_student = false,
-      is_author_foreign = false
+      is_author_foreign = false,
     } = req.body;
+
+    is_author_from_industry = is_author_from_industry==="Yes" ? 1 : 0
+    is_author_student = is_author_student==="Yes" ? 1 : 0
+    is_author_foreign = is_author_foreign==="Yes" ? 1 : 0
 
     try {
       const pool = req.app.get("dbPool");
@@ -737,7 +765,5 @@ userApp.post(
     }
   })
 );
-
-
 
 module.exports = userApp;

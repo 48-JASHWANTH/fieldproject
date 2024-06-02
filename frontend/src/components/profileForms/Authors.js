@@ -1,8 +1,9 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./Forms.css";
+import { axiosWithToken } from "../../axiosWithToken";
 import { useNavigate } from "react-router-dom";
-import './Forms.css'
 
 const Authors = () => {
   const {
@@ -12,11 +13,34 @@ const Authors = () => {
   } = useForm();
 
   const navigate = useNavigate();
+  const [dialogMessage, setDialogMessage] = useState("");
 
-  const onSubmit = (data) => {
+  useEffect(() => {
+    if (dialogMessage) {
+      const timer = setTimeout(() => {
+        setDialogMessage("");
+      }, 7000);
+      return () => clearTimeout(timer);
+    }
+  }, [dialogMessage]);
+
+  async function onSubmit(data) {
     console.log(data);
-    navigate("/FacultyPage/FacultyInfo");
+    let res = await axiosWithToken.post(
+      "http://localhost:5000/userApi/Authors",
+      data
+    );
+    console.log(res.status);
+    if (res.status === 200) {
+      setDialogMessage(res.data.message);
+      navigate("/FacultyPage/FacultyInfo/FacultyProfile");
+    }
+  }
+
+  const handlePrev = () => {
+    navigate("/FacultyPage/CompleteProfile/Nomination");
   };
+
 
   return (
     <div className="container  mt-5 shadow-lg p-3 mb-5 bg-white rounded">
@@ -128,7 +152,9 @@ const Authors = () => {
 
         <div className="row mb-3">
           <div className="col-md-4">
-            <label className="form-label">Is Author from Industry?</label>
+            <label className="form-label d-block">
+              Is Author from Industry?
+            </label>
             <div className="form-check form-check-inline">
               <input
                 type="radio"
@@ -201,7 +227,7 @@ const Authors = () => {
 
         <div className="row mb-3">
           <div className="col-md-4">
-            <label className="form-label">Is Author a Student?</label>
+            <label className="form-label d-block">Is Author a Student?</label>
             <div className="form-check form-check-inline">
               <input
                 type="radio"
@@ -233,7 +259,7 @@ const Authors = () => {
             )}
           </div>
           <div className="col-md-4">
-            <label className="form-label">Is Author Foreign?</label>
+            <label className="form-label d-block">Is Author Foreign?</label>
             <div className="form-check form-check-inline">
               <input
                 type="radio"
@@ -266,12 +292,15 @@ const Authors = () => {
           </div>
         </div>
 
-        <div className="d-flex justify-content-center">
+        <div className="nav-buttons d-flex justify-content-between">
           <button
-            type="submit"
-            className="btn btn-primary"
-            onClick={handleSubmit(onSubmit)}
+            type="button"
+            onClick={handlePrev}
+            className="btn btn-success"
           >
+            Prev
+          </button>
+          <button type="submit" className="btn btn-success">
             Submit
           </button>
         </div>

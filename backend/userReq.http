@@ -4,7 +4,7 @@ POST http://localhost:5000/userApi/register
 Content-Type: application/json
 
 {
-    "faculty_id":"9",
+    "faculty_id":"2",
     "email":"user@gmail.com",
     "contactNumber":"9999999999",
     "password":"admin",

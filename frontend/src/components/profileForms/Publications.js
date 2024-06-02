@@ -1,35 +1,50 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './Forms.css'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./Forms.css";
+import { axiosWithToken } from "../../axiosWithToken";
+import { useNavigate } from "react-router-dom";
 
 const Publications = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
-    setValue,
   } = useForm();
 
-  const onSubmit = (data) => {
-    // Handle form submission, e.g., send data to server
-    console.log(data);
-  };
+  const navigate = useNavigate();
+  const [dialogMessage, setDialogMessage] = useState("");
 
-  const handleNext = () => {
-    // Move to next step or page
-    console.log("Next");
-  };
+  useEffect(() => {
+    if (dialogMessage) {
+      const timer = setTimeout(() => {
+        setDialogMessage("");
+      }, 7000);
+      return () => clearTimeout(timer);
+    }
+  }, [dialogMessage]);
+
+  async function onSubmit(data) {
+    console.log(data);
+    let res = await axiosWithToken.post(
+      "http://localhost:5000/userApi/Publications",
+      data
+    );
+    console.log(res.status);
+    if (res.status === 200) {
+      setDialogMessage(res.data.message);
+      navigate("/FacultyPage/CompleteProfile/Projects");
+    }
+  }
 
   const handlePrev = () => {
-    // Move to previous step or page
-    console.log("Previous");
+    navigate('/FacultyPage/CompleteProfile/BasicInfo')
   };
 
   return (
     <div className="container mt-5 shadow-lg p-3 mb-5 bg-white rounded">
       <h2 className="form-heading mb-4">Publication Form</h2>
+      {dialogMessage && <div className="dialog-box show">{dialogMessage}</div>}
       <form onSubmit={handleSubmit(onSubmit)} className="publication-form">
         <div className="row mb-3 ">
           <div className="col-md-4">
@@ -86,7 +101,7 @@ const Publications = () => {
               )}
             </div>
             <div className="col-md-4">
-              <label className="form-label">Designation:</label>
+              <label className="form-label d-block">Designation:</label>
               <div className="form-check form-check-inline">
                 <input
                   type="radio"
@@ -139,8 +154,11 @@ const Publications = () => {
                 {...register("dept", { required: true })}
                 className={`form-control ${errors.dept ? "is-invalid" : ""}`}
                 id="dept"
+                defaultValue=""
               >
-                <option value="">Select Department</option>
+                <option value="" disabled>
+                  -- Select Department --
+                </option>
                 <option value="dept1">Department 1</option>
                 <option value="dept2">Department 2</option>
                 <option value="dept3">Department 3</option>
@@ -522,7 +540,7 @@ const Publications = () => {
         <div className="form-group">
           <div className="row mb-3">
             <div className="col-md-4">
-              <label className="form-label">Scopus:</label>
+              <label className="form-label d-block">Scopus:</label>
               <div className="form-check form-check-inline">
                 <input
                   type="radio"
@@ -558,7 +576,7 @@ const Publications = () => {
               )}
             </div>
             <div className="col-md-4">
-              <label className="form-label">Web of Science:</label>
+              <label className="form-label d-block">Web of Science:</label>
               <div className="form-check form-check-inline">
                 <input
                   type="radio"
@@ -594,7 +612,7 @@ const Publications = () => {
               )}
             </div>
             <div className="col-md-4">
-              <label className="form-label">SCI:</label>
+              <label className="form-label d-block">SCI:</label>
               <div className="form-check form-check-inline">
                 <input
                   type="radio"
@@ -634,7 +652,7 @@ const Publications = () => {
         <div className="form-group">
           <div className="row mb-3">
             <div className="col-md-4">
-              <label className="form-label">Google Scholar:</label>
+              <label className="form-label d-block">Google Scholar:</label>
               <div className="form-check form-check-inline">
                 <input
                   type="radio"
@@ -670,7 +688,7 @@ const Publications = () => {
               )}
             </div>
             <div className="col-md-4">
-              <label className="form-label">UGC Rated:</label>
+              <label className="form-label d-block">UGC Rated:</label>
               <div className="form-check form-check-inline">
                 <input
                   type="radio"
@@ -972,7 +990,7 @@ const Publications = () => {
               )}
             </div>
             <div className="col-md-4">
-              <label className="form-label">Industry:</label>
+              <label className="form-label d-block">Industry:</label>
               <div className="form-check form-check-inline">
                 <input
                   type="radio"
@@ -1012,7 +1030,7 @@ const Publications = () => {
         <div className="form-group">
           <div className="row mb-3">
             <div className="col-md-4">
-              <label className="form-label">Foreign Author:</label>
+              <label className="form-label d-block">Foreign Author:</label>
               <div className="form-check form-check-inline">
                 <input
                   type="radio"
@@ -1048,7 +1066,7 @@ const Publications = () => {
               )}
             </div>
             <div className="col-md-4">
-              <label className="form-label">Publication Status:</label>
+              <label className="form-label d-block">Publication Status:</label>
               <div className="form-check form-check-inline">
                 <input
                   type="radio"
@@ -1098,7 +1116,7 @@ const Publications = () => {
               )}
             </div>
             <div className="col-md-4">
-              <label className="form-label">Student Presence:</label>
+              <label className="form-label d-block">Student Presence:</label>
               <div className="form-check form-check-inline">
                 <input
                   type="radio"
@@ -1145,11 +1163,7 @@ const Publications = () => {
           >
             Prev
           </button>
-          <button
-            type="button"
-            onClick={handleSubmit(handleNext)}
-            className="btn btn-success"
-          >
+          <button type="submit" className="btn btn-success">
             Next
           </button>
         </div>
