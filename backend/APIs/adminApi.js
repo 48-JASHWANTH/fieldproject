@@ -4,42 +4,6 @@ const bcryptjs = require("bcryptjs");
 const expressAsyncHandler = require("express-async-handler");
 const jsonwebtoken = require("jsonwebtoken");
 require("dotenv").config();
-const nodemailer = require("nodemailer");
-const twilio = require("twilio");
-
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
-const client = twilio(
-  process.env.TWILIO_ACCOUNT_SID,
-  process.env.TWILIO_AUTH_TOKEN
-);
-
-const sendApprovalEmail = (email) => {
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: "Account Approved",
-    text: "Your account has been approved. You can now login.",
-  };
-
-  return transporter.sendMail(mailOptions);
-};
-
-const sendApprovalSMS = (phoneNumber) => {
-  return client.messages.create({
-    body: "Your account has been approved. You can now login.",
-    from: process.env.TWILIO_PHONE_NUMBER,
-    to: phoneNumber,
-  });
-};
 
 adminApp.post(
   "/login",
@@ -118,8 +82,6 @@ adminApp.put(
           SET approveStatus = 1
           WHERE faculty_id = '${faculty_id}'
         `);
-      await sendApprovalEmail(email);
-      await sendApprovalSMS(contactNumber);
 
       res.status(200).json({ message: "Faculty member approved successfully" });
     } catch (err) {
