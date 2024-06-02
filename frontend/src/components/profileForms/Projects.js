@@ -1,7 +1,9 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import "bootstrap/dist/css/bootstrap.min.css";
-import './Forms.css'
+import "./Forms.css";
+import { axiosWithToken } from "../../axiosWithToken";
+import { useNavigate } from "react-router-dom";
 
 const Projects = () => {
   const {
@@ -10,8 +12,33 @@ const Projects = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const navigate = useNavigate();
+  const [dialogMessage, setDialogMessage] = useState("");
+
+  useEffect(() => {
+    if (dialogMessage) {
+      const timer = setTimeout(() => {
+        setDialogMessage("");
+      }, 7000);
+      return () => clearTimeout(timer);
+    }
+  }, [dialogMessage]);
+
+  async function onSubmit(data) {
     console.log(data);
+    let res = await axiosWithToken.post(
+      "http://localhost:5000/userApi/Projects",
+      data
+    );
+    console.log(res.status);
+    if (res.status === 200) {
+      setDialogMessage(res.data.message);
+      navigate("/FacultyPage/CompleteProfile/Patents");
+    }
+  }
+
+  const handlePrev = () => {
+    navigate("/FacultyPage/CompleteProfile/Publications");
   };
 
   return (
@@ -45,8 +72,9 @@ const Projects = () => {
                 errors.project_type ? "is-invalid" : ""
               }`}
               id="project_type"
+              defaultValue=""
             >
-              <option value="">Select Project Type</option>
+              <option value="" disabled>-- Select Project Type --</option>
               <option value="Mini">Mini</option>
               <option value="Major">Major</option>
             </select>
@@ -138,7 +166,7 @@ const Projects = () => {
             )}
           </div>
           <div className="col-md-4">
-            <label className="form-label">Foreign</label>
+            <label className="form-label d-block">Foreign</label>
             <div className="form-check form-check-inline">
               <input
                 type="radio"
@@ -267,7 +295,7 @@ const Projects = () => {
             />
           </div>
           <div className="col-md-4">
-            <label className="form-label">Student Presence</label>
+            <label className="form-label d-block">Student Presence</label>
             <div className="form-check form-check-inline">
               <input
                 type="radio"
@@ -299,7 +327,7 @@ const Projects = () => {
             )}
           </div>
           <div className="col-md-4">
-            <label className="form-label">Funded</label>
+            <label className="form-label d-block">Funded</label>
             <div className="form-check form-check-inline">
               <input
                 type="radio"
@@ -360,8 +388,11 @@ const Projects = () => {
               {...register("status", { required: true })}
               className={`form-control ${errors.status ? "is-invalid" : ""}`}
               id="status"
+              defaultValue=""
             >
-              <option value="">Select Status</option>
+              <option value="" disabled>
+                -- Select Status --
+              </option>
               <option value="Rejected">Rejected</option>
               <option value="Submitted">Submitted</option>
               <option value="Approved">Approved</option>
@@ -371,8 +402,12 @@ const Projects = () => {
             )}
           </div>
         </div>
-        <div className="d-flex justify-content-between">
-          <button type="button" className="btn btn-success">
+        <div className="nav-buttons d-flex justify-content-between">
+          <button
+            type="button"
+            onClick={handlePrev}
+            className="btn btn-success"
+          >
             Prev
           </button>
           <button type="submit" className="btn btn-success">

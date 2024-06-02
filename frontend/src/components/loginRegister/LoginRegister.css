@@ -58,7 +58,7 @@ form {
   height: 100%;
   border-radius: 10px;
 }
-input:not([type="radio"]) {
+input:not([type="radio"],[type="checkbox"]) {
   background: #eee;
   padding: 12px 15px;
   margin: 4px 15px;
@@ -156,10 +156,24 @@ button:active {
   transform: translateX(100%);
 }
 
-.lr-dialog-box.show {
-  display: block;
-  background: white;
-  color: black;
-  padding: 10px;
+.dialog-box {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: lightgreen;
+  color: green;
+  padding: 15px 30px; 
+  border: 1px solid rgb(93, 230, 93);
   border-radius: 5px;
+  z-index: 1000;
+  display: none; 
+  width: 80%; 
+  max-width: 600px; 
+  text-align: center; 
+  font-size: 1.2rem; 
+}
+
+.dialog-box.show {
+  display: block; 
 }

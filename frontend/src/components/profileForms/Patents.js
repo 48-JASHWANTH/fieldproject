@@ -1,7 +1,9 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './Forms.css'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./Forms.css";
+import { axiosWithToken } from "../../axiosWithToken";
+import { useNavigate } from "react-router-dom";
 
 const Patents = () => {
   const {
@@ -10,8 +12,33 @@ const Patents = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const navigate = useNavigate();
+  const [dialogMessage, setDialogMessage] = useState("");
+
+  useEffect(() => {
+    if (dialogMessage) {
+      const timer = setTimeout(() => {
+        setDialogMessage("");
+      }, 7000);
+      return () => clearTimeout(timer);
+    }
+  }, [dialogMessage]);
+
+  async function onSubmit(data) {
     console.log(data);
+    let res = await axiosWithToken.post(
+      "http://localhost:5000/userApi/Patents",
+      data
+    );
+    console.log(res.status);
+    if (res.status === 200) {
+      setDialogMessage(res.data.message);
+      navigate("/FacultyPage/CompleteProfile/Nomination");
+    }
+  }
+
+  const handlePrev = () => {
+    navigate("/FacultyPage/CompleteProfile/Projects");
   };
 
   return (
@@ -56,7 +83,9 @@ const Patents = () => {
             <input
               type="text"
               {...register("faculty_id", { required: true })}
-              className={`form-control ${errors.faculty_id ? "is-invalid" : ""}`}
+              className={`form-control ${
+                errors.faculty_id ? "is-invalid" : ""
+              }`}
               id="faculty_id"
             />
             {errors.faculty_id && (
@@ -67,7 +96,7 @@ const Patents = () => {
 
         <div className="row mb-3">
           <div className="col-md-4">
-            <label className="form-label">Designation</label>
+            <label className="form-label d-block">Designation</label>
             <div className="form-check form-check-inline">
               <input
                 type="radio"
@@ -116,9 +145,14 @@ const Patents = () => {
               {...register("dept", { required: true })}
               className={`form-select ${errors.dept ? "is-invalid" : ""}`}
               id="dept"
+              defaultValue=""
             >
-              <option value="">Select Department</option>
-              {/* Add department options here */}
+              <option value="" disabled>
+                -- Select Department --
+              </option>
+              <option value="dept1">Department 1</option>
+              <option value="dept2">Department 2</option>
+              <option value="dept3">Department 3</option>
             </select>
             {errors.dept && (
               <div className="invalid-feedback">Department is required</div>
@@ -195,7 +229,9 @@ const Patents = () => {
             <input
               type="text"
               {...register("author_ID3", { required: true })}
-              className={`form-control ${errors.author_ID3 ? "is-invalid" : ""}`}
+              className={`form-control ${
+                errors.author_ID3 ? "is-invalid" : ""
+              }`}
               id="author_ID3"
             />
             {errors.author_ID3 && (
@@ -240,7 +276,9 @@ const Patents = () => {
             <input
               type="text"
               {...register("author_ID6", { required: true })}
-              className={`form-control ${errors.author_ID6 ? "is-invalid" : ""}`}
+              className={`form-control ${
+                errors.author_ID6 ? "is-invalid" : ""
+              }`}
               id="author_ID6"
             />
             {errors.author_ID6 && (
@@ -254,7 +292,9 @@ const Patents = () => {
             <input
               type="text"
               {...register("author_ID7", { required: true })}
-              className={`form-control ${errors.author_ID7 ? "is-invalid" : ""}`}
+              className={`form-control ${
+                errors.author_ID7 ? "is-invalid" : ""
+              }`}
               id="author_ID7"
             />
             {errors.author_ID7 && (
@@ -268,7 +308,9 @@ const Patents = () => {
             <input
               type="text"
               {...register("author_ID8", { required: true })}
-              className={`form-control ${errors.author_ID8 ? "is-invalid" : ""}`}
+              className={`form-control ${
+                errors.author_ID8 ? "is-invalid" : ""
+              }`}
               id="author_ID8"
             />
             {errors.author_ID8 && (
@@ -285,7 +327,9 @@ const Patents = () => {
             <input
               type="text"
               {...register("author_ID9", { required: true })}
-              className={`form-control ${errors.author_ID9 ? "is-invalid" : ""}`}
+              className={`form-control ${
+                errors.author_ID9 ? "is-invalid" : ""
+              }`}
               id="author_ID9"
             />
             {errors.author_ID9 && (
@@ -366,7 +410,7 @@ const Patents = () => {
             )}
           </div>
           <div className="col-md-4">
-            <label htmlFor="foreign_" className="form-label">
+            <label htmlFor="foreign_" className="form-label d-block">
               Foreign
             </label>
             <div className="form-check form-check-inline">
@@ -437,7 +481,7 @@ const Patents = () => {
             )}
           </div>
           <div className="col-md-4">
-            <label htmlFor="studentPresence" className="form-label">
+            <label htmlFor="studentPresence" className="form-label d-block">
               Student Presence
             </label>
             <div className="form-check form-check-inline">
@@ -525,7 +569,7 @@ const Patents = () => {
 
         <div className="row mb-3">
           <div className="col-md-4">
-            <label htmlFor="patentStatus" className="form-label">
+            <label htmlFor="patentStatus" className="form-label d-block">
               Patent Status
             </label>
             <div className="form-check form-check-inline">
@@ -587,8 +631,12 @@ const Patents = () => {
           </div>
         </div>
 
-        <div className="d-flex justify-content-between">
-          <button type="button" className="btn btn-success">
+        <div className="nav-buttons d-flex justify-content-between">
+          <button
+            type="button"
+            onClick={handlePrev}
+            className="btn btn-success"
+          >
             Prev
           </button>
           <button type="submit" className="btn btn-success">
