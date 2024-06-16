@@ -828,12 +828,12 @@ userApp.post(
         service: "gmail",
         auth: {
           user: process.env.user1,
-          pass: process.encv,
+          pass: process.env.pass1,
         },
       });
       console.log(result.recordset[0].faculty_id);
       var mailOptions = {
-        from: "ratnajashwanth64@gmail.com",
+        from: process.env.user1,
         to: `${email}`,
         subject: "Reset your password",
         text: `http://localhost:5000/resetPassword/${result.recordset[0].faculty_id}/${token}`,
