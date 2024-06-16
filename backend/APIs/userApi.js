@@ -6,6 +6,9 @@ const jsonwebtoken = require("jsonwebtoken");
 require("dotenv").config();
 const moment = require("moment");
 const verifyToken = require("../middlewares/verifyToken");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
+const sqlServer = require("mssql");
 
 // User registration
 userApp.post(
@@ -297,13 +300,13 @@ userApp.post(
       "YYYY-MM-DD"
     );
 
-    scopus = scopus==="Yes" ? 1 : 0;
-    webOfScience = webOfScience==="Yes" ? 1 : 0;
-    SCI = SCI==="Yes" ? 1 : 0;
-    GoogleScholar = GoogleScholar="Yes" ? 1 : 0;
-    UGCRated = UGCRated==="Yes" ? 1 : 0;
-    foreignAuthor = foreignAuthor==="Yes" ? 1 : 0;
-    studentPresence = studentPresence==="Yes" ? 1 : 0;
+    scopus = scopus === "Yes" ? 1 : 0;
+    webOfScience = webOfScience === "Yes" ? 1 : 0;
+    SCI = SCI === "Yes" ? 1 : 0;
+    GoogleScholar = GoogleScholar = "Yes" ? 1 : 0;
+    UGCRated = UGCRated === "Yes" ? 1 : 0;
+    foreignAuthor = foreignAuthor === "Yes" ? 1 : 0;
+    studentPresence = studentPresence === "Yes" ? 1 : 0;
 
     try {
       const pool = req.app.get("dbPool");
@@ -454,9 +457,9 @@ userApp.post(
     appliedDate = moment(appliedDate, "YYYY-MM-DD").format("YYYY-MM-DD");
     dateofSanction = moment(dateofSanction, "YYYY-MM-DD").format("YYYY-MM-DD");
 
-    foreign_ = foreign_==="Yes" ? 1 : 0;
-    studentPresence = studentPresence==="Yes" ? 1 : 0;
-    funded = funded==="Yes" ? 1 : 0;
+    foreign_ = foreign_ === "Yes" ? 1 : 0;
+    studentPresence = studentPresence === "Yes" ? 1 : 0;
+    funded = funded === "Yes" ? 1 : 0;
 
     try {
       const pool = req.app.get("dbPool");
@@ -563,8 +566,8 @@ userApp.post(
     );
     dateOfGranting = moment(dateOfGranting, "YYYY-MM-DD").format("YYYY-MM-DD");
 
-    foreign_ = foreign_==="Yes" ? 1 : 0;
-    studentPresence = studentPresence==="Yes" ? 1 : 0;
+    foreign_ = foreign_ === "Yes" ? 1 : 0;
+    studentPresence = studentPresence === "Yes" ? 1 : 0;
 
     try {
       const pool = req.app.get("dbPool");
@@ -721,9 +724,9 @@ userApp.post(
       is_author_foreign = false,
     } = req.body;
 
-    is_author_from_industry = is_author_from_industry==="Yes" ? 1 : 0
-    is_author_student = is_author_student==="Yes" ? 1 : 0
-    is_author_foreign = is_author_foreign==="Yes" ? 1 : 0
+    is_author_from_industry = is_author_from_industry === "Yes" ? 1 : 0;
+    is_author_student = is_author_student === "Yes" ? 1 : 0;
+    is_author_foreign = is_author_foreign === "Yes" ? 1 : 0;
 
     try {
       const pool = req.app.get("dbPool");
@@ -763,6 +766,128 @@ userApp.post(
       console.error("SQL error:", err);
       res.status(500).send("Error inserting data");
     }
+  })
+);
+
+userApp.get(
+  "/FacultyProfile/:faculty_id",
+  expressAsyncHandler(async (req, res) => {
+    const faculty_id = req.params.faculty_id;
+    if (!faculty_id) {
+      return res.status(400).json({ message: "Faculty ID is required" });
+    }
+
+    try {
+      const pool = req.app.get("dbPool");
+      const result = await pool
+        .request()
+        .input("faculty_id", faculty_id)
+        .query("SELECT * FROM basicInfoTable WHERE faculty_id = @faculty_id");
+
+      if (result.recordset.length === 0) {
+        return res.status(404).json({ message: "Faculty not found" });
+      }
+
+      res.json(result.recordset[0]);
+    } catch (err) {
+      console.error("Error during faculty profile retrieval:", err);
+      res
+        .status(500)
+        .json({ message: "Error during faculty profile retrieval" });
+    }
+  })
+);
+
+//Forget password
+userApp.post(
+  "/ForgetPassword",
+  expressAsyncHandler(async (req, res) => {
+    //console.log(req.body)
+    const { email } = req.body;
+    const pool = req.app.get("dbPool");
+
+    try {
+      const result = await pool
+        .request()
+        .input("email", sqlServer.NVarChar, email)
+        .query("SELECT * FROM FacultyTable WHERE email = @email");
+
+      //console.log(result)
+
+      if (result.recordset.length === 0) {
+        return res.status(400).json({message:"User with this email does not exist."});
+      }
+      //console.log(result.recordset)
+      const token = jsonwebtoken.sign(
+        { faculty_id: result.recordset[0].faculty_id },
+        process.env.JWT_SECRET,
+        { expiresIn: "1d" }
+      );
+      //console.log(token)
+      var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.user1,
+          pass: process.encv,
+        },
+      });
+      console.log(result.recordset[0].faculty_id);
+      var mailOptions = {
+        from: "ratnajashwanth64@gmail.com",
+        to: `${email}`,
+        subject: "Reset your password",
+        text: `http://localhost:5000/resetPassword/${result.recordset[0].faculty_id}/${token}`,
+      };
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+        } else {
+          return res.status(200).json({message:"Success"});
+        }
+      });
+    } catch (error) {
+      console.error("Error in forgot password:", error);
+      res.status(500).send("Server error.");
+    }
+  })
+);
+
+//Reset password
+userApp.post(
+  "/ResetPassword/:id/:token",
+  expressAsyncHandler(async (req, res) => {
+    const { id: faculty_id, token } = req.params;
+    const { password } = req.body;
+
+    jsonwebtoken.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+      if (err) {
+        return res.json({ Status: "Error with token" });
+      } else {
+        try {
+          const pool = req.app.get("dbPool");
+
+          const hashedPassword = await bcryptjs.hash(password, 10);
+
+          const result = await pool
+            .request()
+            .input("faculty_id", sqlServer.NVarChar, faculty_id)
+            .input("hashedPassword", sqlServer.NVarChar, hashedPassword) // Provide hashedPassword directly as input
+            .query(
+              "UPDATE facultyTable SET password = @hashedPassword WHERE faculty_id = @faculty_id"
+            );
+
+          if (result.rowsAffected[0] === 0) {
+            return res.status(400).json({ Status: "Error updating password" });
+          }
+
+          return res.json({ Status: "Password updated successfully" });
+        } catch (error) {
+          console.error("Error resetting password:", error);
+          return res.status(500).send("Server error.");
+        }
+      }
+    });
   })
 );
 

@@ -21,6 +21,8 @@ Content-Type: application/json
     "password":"faculty"
 }
 
+###faculty profile
+GET http://localhost:5000/userApi/FacultyProfile/1
 
 ###User basicInfo    
 POST http://localhost:5000/userApi/basicInfo
@@ -221,4 +223,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYWN1bHR5X2lkIjoiM
   "author_country": "USA",
   "is_author_student": 1,
   "is_author_foreign": 0
+}
+
+
+###ForgetPassword
+POST http://localhost:5000/userApi/ForgetPassword 
+Content-Type: application/json
+
+{
+  "email":"ratnajashwanth01@gmail.com"
 }

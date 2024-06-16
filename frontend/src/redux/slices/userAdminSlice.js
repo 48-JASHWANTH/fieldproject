@@ -16,6 +16,7 @@ export const userAdminLoginThunk = createAsyncThunk(
         // Store token in local storage/session storage
         localStorage.setItem("token", res.data.payload);
         // Return data
+        console.log(res)
         return res.data;
       } else {
         return thunkApi.rejectWithValue(res.data.message);
