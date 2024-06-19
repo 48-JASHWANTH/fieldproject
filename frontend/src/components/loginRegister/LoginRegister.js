@@ -99,7 +99,9 @@ function LoginRegister() {
         }
         setDialogMessage("Login Successful !");
       } else if (loginUserStatus === false) {
-        setDialogMessage("Please check your credentials and try again.");
+        setTimeout(() => {
+          setDialogMessage("Please check your credentials and try again...!");
+        }, 375);
       }
     }
   }, [loginUserStatus, loginAttempted]);
@@ -205,6 +207,8 @@ function LoginRegister() {
                 placeholder="Contact number"
                 required
                 {...registerSignUp("contactNumber")}
+                pattern="[0-9]{10}"
+                maxLength="10"
                 className="lr-input m-1 rounded-4"
               />
               <input

@@ -30,6 +30,17 @@ const AdminPage = () => {
     }
   };
 
+  const disapproveUser = async (faculty_id) => {
+    try {
+      await axios.put("http://localhost:5000/adminApi/disapprove", {
+        faculty_id,
+      });
+      setUsers(users.filter((user) => user.faculty_id !== faculty_id));
+    } catch (error) {
+      console.error("Error disapproving user:", error);
+    }
+  };
+
   return (
     <div className="container mt-5">
       <h2>Unapproved Users</h2>
@@ -50,12 +61,18 @@ const AdminPage = () => {
               <td>{user.contactNumber}</td>
               <td>
                 <button
-                  className="btn btn-success"
+                  className="btn btn-success me-2"
                   onClick={() =>
                     approveUser(user.faculty_id, user.email, user.contactNumber)
                   }
                 >
                   Approve
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => disapproveUser(user.faculty_id)}
+                >
+                  Disapprove
                 </button>
               </td>
             </tr>
