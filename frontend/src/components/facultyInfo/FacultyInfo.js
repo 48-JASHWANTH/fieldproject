@@ -2,8 +2,19 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import './FacultyInfo.css';
+import { useSelector } from "react-redux";
+import { Navigate, useLocation } from "react-router-dom";
+
 
 function FacultyInfo() {
+
+  let { currentUser } = useSelector(
+    (state) => state.userAdminLoginReducer
+  );
+
+  const { state } = useLocation();
+
+  console.log(state)
   return (
     <div className="d-flex facultyInfoBody">
       <div className="bg-warning p-3 d-flex flex-column justify-content-around">

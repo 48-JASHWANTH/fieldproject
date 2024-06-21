@@ -771,6 +771,7 @@ userApp.post(
 
 userApp.get(
   "/FacultyProfile/:faculty_id",
+  verifyToken,
   expressAsyncHandler(async (req, res) => {
     const faculty_id = req.params.faculty_id;
     if (!faculty_id) {
@@ -815,7 +816,9 @@ userApp.post(
       //console.log(result)
 
       if (result.recordset.length === 0) {
-        return res.status(400).json({message:"User with this email does not exist."});
+        return res
+          .status(400)
+          .json({ message: "User with this email does not exist." });
       }
       //console.log(result.recordset)
       const token = jsonwebtoken.sign(
@@ -843,7 +846,7 @@ userApp.post(
         if (error) {
           console.log(error);
         } else {
-          return res.status(200).json({message:"Success"});
+          return res.status(200).json({ message: "Success" });
         }
       });
     } catch (error) {

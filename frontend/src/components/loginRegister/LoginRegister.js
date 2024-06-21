@@ -8,12 +8,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { userAdminLoginThunk } from "../../redux/slices/userAdminSlice";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function LoginRegister() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const [userType, setUserType] = useState("faculty");
   const [loginAttempted, setLoginAttempted] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false); // State to manage password visibility for Sign In
+  const [signUpPasswordVisible, setSignUpPasswordVisible] = useState(false); // State to manage password visibility for Sign Up
 
   const {
     register: registerSignIn,
@@ -81,7 +84,7 @@ function LoginRegister() {
   let { loginUserStatus, currentUser } = useSelector(
     (state) => state.userAdminLoginReducer
   );
-
+  console.log(currentUser)
   function onSignInFormSubmit(userCredentials) {
     setLoginAttempted(true);
     dispatch(userAdminLoginThunk(userCredentials));
@@ -108,6 +111,14 @@ function LoginRegister() {
 
   const handleUserTypeChange = (event) => {
     setUserType(event.target.value);
+  };
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const toggleSignUpPasswordVisibility = () => {
+    setSignUpPasswordVisible(!signUpPasswordVisible);
   };
 
   return (
@@ -164,14 +175,22 @@ function LoginRegister() {
                   : registerSignIn("faculty_id"))}
                 className="lr-input m-1 rounded-3"
               />
-              <input
-                type="password"
-                id="password"
-                placeholder="Password"
-                required
-                {...registerSignIn("password")}
-                className="lr-input m-1 rounded-3"
-              />
+              <div className="password-container">
+                <input
+                  type={passwordVisible ? "text" : "password"}
+                  id="password"
+                  placeholder="Password"
+                  required
+                  {...registerSignIn("password")}
+                  className="lr-input m-1 rounded-3"
+                />
+                <span
+                  className="password-toggle-icon"
+                  onClick={togglePasswordVisibility}
+                >
+                  {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
               <NavLink className="nav-link" to="ForgetPassword">
                 Forgot your Password?
               </NavLink>
@@ -191,7 +210,7 @@ function LoginRegister() {
                 placeholder="Faculty ID"
                 required
                 {...registerSignUp("faculty_id")}
-                className="lr-input m-1 rounded-4"
+                className="lr-input m-1 rounded-3"
               />
               <input
                 type="email"
@@ -199,7 +218,7 @@ function LoginRegister() {
                 placeholder="Email"
                 required
                 {...registerSignUp("email")}
-                className="lr-input m-1 rounded-4"
+                className="lr-input m-1 rounded-3"
               />
               <input
                 type="tel"
@@ -209,16 +228,24 @@ function LoginRegister() {
                 {...registerSignUp("contactNumber")}
                 pattern="[0-9]{10}"
                 maxLength="10"
-                className="lr-input m-1 rounded-4"
+                className="lr-input m-1 rounded-3"
               />
-              <input
-                type="password"
-                id="password"
-                placeholder="Password"
-                required
-                {...registerSignUp("password")}
-                className="lr-input m-1 rounded-4"
-              />
+              <div className="password-container">
+                <input
+                  type={passwordVisible ? "text" : "password"}
+                  id="password"
+                  placeholder="Password"
+                  required
+                  {...registerSignUp("password")}
+                  className="lr-input m-1 rounded-3"
+                />
+                <span
+                  className="password-toggle-icon"
+                  onClick={togglePasswordVisibility}
+                >
+                  {passwordVisible ? <FaEyeSlash/> : <FaEye />}
+                </span>
+              </div>
               <button className="lr-button m-1 rounded-5">Sign Up</button>
             </form>
           </div>

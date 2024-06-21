@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./Forms.css";
 import { axiosWithToken } from "../../axiosWithToken";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Authors = () => {
   const {
@@ -12,6 +13,7 @@ const Authors = () => {
     formState: { errors },
   } = useForm();
 
+  let { currentUser } = useSelector((state) => state.userAdminLoginReducer);
   const navigate = useNavigate();
   const [dialogMessage, setDialogMessage] = useState("");
 
@@ -30,10 +32,12 @@ const Authors = () => {
       "http://localhost:5000/userApi/Authors",
       data
     );
-    console.log(res.status);
     if (res.status === 200) {
       setDialogMessage(res.data.message);
-      navigate("/FacultyPage/FacultyInfo/FacultyProfile");
+      // Passing currentUser as state to the next route
+      navigate("/FacultyPage/FacultyInfo/FacultyProfile", {
+        state: { currentUser },
+      });
     }
   }
 
@@ -41,9 +45,8 @@ const Authors = () => {
     navigate("/FacultyPage/CompleteProfile/Nomination");
   };
 
-
   return (
-    <div className="container  mt-5 shadow-lg p-3 mb-5 bg-white rounded">
+    <div className="container mt-5 shadow-lg p-3 mb-5 bg-white rounded">
       <h2 className="form-heading mb-4">Authors Form</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="container mt-4">
         <div className="row mb-3">
@@ -284,7 +287,7 @@ const Authors = () => {
                 No
               </label>
             </div>
-            {errors.isAuthorForeign && (
+            {errors.is_author_foreign && (
               <div className="invalid-feedback d-block">
                 This field is required
               </div>

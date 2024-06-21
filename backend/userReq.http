@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 
 ###faculty profile
-GET http://localhost:5000/userApi/FacultyProfile/1
+GET http://localhost:5000/userApi/FacultyProfile/
 
 ###User basicInfo    
 POST http://localhost:5000/userApi/basicInfo

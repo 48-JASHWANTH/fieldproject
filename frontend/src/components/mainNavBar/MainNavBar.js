@@ -17,6 +17,7 @@ const MainNavBar = () => {
   function signOut() {
     //remove token from local storage
     localStorage.removeItem("token");
+    localStorage.removeItem("currentFaculty")
     dispatch(resetState());
   }
 
