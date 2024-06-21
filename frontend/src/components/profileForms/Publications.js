@@ -9,20 +9,27 @@ const Publications = () => {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm();
+  const formValues = watch();
 
   const navigate = useNavigate();
-  const [dialogMessage, setDialogMessage] = useState("");
 
   useEffect(() => {
-    if (dialogMessage) {
-      const timer = setTimeout(() => {
-        setDialogMessage("");
-      }, 7000);
-      return () => clearTimeout(timer);
+    const savedFormData = localStorage.getItem("formData");
+    if (savedFormData) {
+      const parsedFormData = JSON.parse(savedFormData);
+      for (const key in parsedFormData) {
+        setValue(key, parsedFormData[key]);
+      }
     }
-  }, [dialogMessage]);
+  }, [setValue]);
+
+  useEffect(() => {
+    localStorage.setItem("formData", JSON.stringify(formValues));
+  }, [formValues]);
 
   async function onSubmit(data) {
     console.log(data);
@@ -32,7 +39,6 @@ const Publications = () => {
     );
     console.log(res.status);
     if (res.status === 200) {
-      setDialogMessage(res.data.message);
       navigate("/FacultyPage/CompleteProfile/Projects");
     }
   }
@@ -44,7 +50,6 @@ const Publications = () => {
   return (
     <div className="container mt-5 shadow-lg p-3 mb-5 bg-white rounded">
       <h2 className="form-heading mb-4">Publication Form</h2>
-      {dialogMessage && <div className="dialog-box show">{dialogMessage}</div>}
       <form onSubmit={handleSubmit(onSubmit)} className="publication-form">
         <div className="row mb-3 ">
           <div className="col-md-4">

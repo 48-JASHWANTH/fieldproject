@@ -15,7 +15,7 @@ function LoginRegister() {
   const [dialogMessage, setDialogMessage] = useState("");
   const [userType, setUserType] = useState("faculty");
   const [loginAttempted, setLoginAttempted] = useState(false);
-  const [passwordVisible, setPasswordVisible] = useState(false); // State to manage password visibility for Sign In
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [signUpPasswordVisible, setSignUpPasswordVisible] = useState(false); // State to manage password visibility for Sign Up
 
   const {
@@ -84,7 +84,7 @@ function LoginRegister() {
   let { loginUserStatus, currentUser } = useSelector(
     (state) => state.userAdminLoginReducer
   );
-  console.log(currentUser)
+  //console.log(currentUser)
   function onSignInFormSubmit(userCredentials) {
     setLoginAttempted(true);
     dispatch(userAdminLoginThunk(userCredentials));

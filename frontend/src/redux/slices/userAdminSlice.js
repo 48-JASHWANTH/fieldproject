@@ -32,7 +32,7 @@ export const userAdminLoginThunk = createAsyncThunk(
           localStorage.setItem("token", res.data.payload);
           localStorage.setItem("currentFaculty",res.data.user.faculty_id)
           // Return data
-          console.log(res)
+          //console.log(res)
         } else {
           return thunkApi.rejectWithValue(res.data.message);
         }

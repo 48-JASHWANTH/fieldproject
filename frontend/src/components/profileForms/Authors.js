@@ -10,21 +10,27 @@ const Authors = () => {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm();
+  const formValues = watch();
 
-  let { currentUser } = useSelector((state) => state.userAdminLoginReducer);
   const navigate = useNavigate();
-  const [dialogMessage, setDialogMessage] = useState("");
 
   useEffect(() => {
-    if (dialogMessage) {
-      const timer = setTimeout(() => {
-        setDialogMessage("");
-      }, 7000);
-      return () => clearTimeout(timer);
+    const savedFormData = localStorage.getItem("formData");
+    if (savedFormData) {
+      const parsedFormData = JSON.parse(savedFormData);
+      for (const key in parsedFormData) {
+        setValue(key, parsedFormData[key]);
+      }
     }
-  }, [dialogMessage]);
+  }, [setValue]);
+
+  useEffect(() => {
+    localStorage.setItem("formData", JSON.stringify(formValues));
+  }, [formValues]);
 
   async function onSubmit(data) {
     console.log(data);
@@ -33,11 +39,7 @@ const Authors = () => {
       data
     );
     if (res.status === 200) {
-      setDialogMessage(res.data.message);
-      // Passing currentUser as state to the next route
-      navigate("/FacultyPage/FacultyInfo/FacultyProfile", {
-        state: { currentUser },
-      });
+      navigate("/FacultyPage/FacultyInfo/FacultyProfile");
     }
   }
 

@@ -9,39 +9,42 @@ const BasicInfo = () => {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm();
+  const formValues = watch();
 
   const navigate = useNavigate();
-  const [dialogMessage, setDialogMessage] = useState("");
 
   useEffect(() => {
-    if (dialogMessage) {
-      const timer = setTimeout(() => {
-        setDialogMessage("");
-      }, 7000);
-      return () => clearTimeout(timer);
+    const savedFormData = localStorage.getItem("formData");
+    if (savedFormData) {
+      const parsedFormData = JSON.parse(savedFormData);
+      for (const key in parsedFormData) {
+        setValue(key, parsedFormData[key]);
+      }
     }
-  }, [dialogMessage]);
+  }, [setValue]);
+
+  useEffect(() => {
+    localStorage.setItem("formData", JSON.stringify(formValues));
+  }, [formValues]);
 
   async function onSubmit(data) {
-    console.log(data);
     let res = await axiosWithToken.post(
       "http://localhost:5000/userApi/BasicInfo",
       data
     );
-    console.log(res.status);
+    //console.log(res.status);
     if (res.status === 200) {
-      setDialogMessage(res.data.message);
       navigate("/FacultyPage/CompleteProfile/Publications");
     }
   }
 
   return (
     <div className="container mt-5 shadow-lg p-3 mb-5 bg-white rounded">
-      {dialogMessage && <div className="dialog-box show">{dialogMessage}</div>}
       <h2 className="form-heading mb-4">BasicInfo</h2>
-      {dialogMessage && <div className="dialog-box show">{dialogMessage}</div>}
       <form onSubmit={handleSubmit(onSubmit)} className="container mt-4">
         <div className="row mb-3">
           <div className="col-md-4">
