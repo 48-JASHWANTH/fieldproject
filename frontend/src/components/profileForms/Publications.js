@@ -49,7 +49,7 @@ const Publications = () => {
 
   return (
     <div className="container mt-5 shadow-lg p-3 mb-5 bg-white rounded">
-      <h2 className="form-heading mb-4">Publication Form</h2>
+      <h2 className="form-heading mb-4">Publication Details</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="publication-form">
         <div className="row mb-3 ">
           <div className="col-md-4">

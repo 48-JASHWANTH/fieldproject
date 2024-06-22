@@ -6,35 +6,84 @@ import "./CompleteProfile.css";
 function CompleteProfile() {
   return (
     <div>
-      <div className="navbar-complete">
-        <Navbar expand="lg">
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto d-flex justify-content-around w-100">
-              <NavLink className="nav-link" to="BasicInfo">
-                Basic Info
-              </NavLink>
-              <NavLink className="nav-link" to="Education">
-                Education
-              </NavLink>
-              <NavLink className="nav-link" to="Publications">
-                Publications
-              </NavLink>
-              <NavLink className="nav-link" to="Projects">
-                Projects
-              </NavLink>
-              <NavLink className="nav-link" to="Patents">
-                Patents
-              </NavLink>
-              <NavLink className="nav-link" to="Nomination">
-                Nomination
-              </NavLink>
-              <NavLink className="nav-link" to="Authors">
-                Authors
-              </NavLink>
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
+      <div className="progress-container">
+        <div className="step">
+          <NavLink
+            to="BasicInfo"
+            className={({ isActive }) =>
+              isActive ? "active step-link" : "step-link"
+            }
+          >
+            <div className="step-icon">🔒</div>
+            <p className="step-label">Basic Info</p>
+          </NavLink>
+        </div>
+        <div className="step">
+          <NavLink
+            to="Education"
+            className={({ isActive }) =>
+              isActive ? "active step-link" : "step-link"
+            }
+          >
+            <div className="step-icon">🎓</div>
+            <p className="step-label">Education</p>
+          </NavLink>
+        </div>
+        <div className="step">
+          <NavLink
+            to="Publications"
+            className={({ isActive }) =>
+              isActive ? "active step-link" : "step-link"
+            }
+          >
+            <div className="step-icon">📄</div>
+            <p className="step-label">Publications</p>
+          </NavLink>
+        </div>
+        <div className="step">
+          <NavLink
+            to="Projects"
+            className={({ isActive }) =>
+              isActive ? "active step-link" : "step-link"
+            }
+          >
+            <div className="step-icon">📊</div>
+            <p className="step-label">Projects</p>
+          </NavLink>
+        </div>
+        <div className="step">
+          <NavLink
+            to="Patents"
+            className={({ isActive }) =>
+              isActive ? "active step-link" : "step-link"
+            }
+          >
+            <div className="step-icon">💡</div>
+            <p className="step-label">Patents</p>
+          </NavLink>
+        </div>
+        <div className="step">
+          <NavLink
+            to="Nomination"
+            className={({ isActive }) =>
+              isActive ? "active step-link" : "step-link"
+            }
+          >
+            <div className="step-icon">🏆</div>
+            <p className="step-label">Nomination</p>
+          </NavLink>
+        </div>
+        <div className="step">
+          <NavLink
+            to="Authors"
+            className={({ isActive }) =>
+              isActive ? "active step-link" : "step-link"
+            }
+          >
+            <div className="step-icon">✍️</div>
+            <p className="step-label">Authors</p>
+          </NavLink>
+        </div>
       </div>
       <Outlet />
     </div>

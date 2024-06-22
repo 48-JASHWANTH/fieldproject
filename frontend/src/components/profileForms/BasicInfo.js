@@ -19,6 +19,7 @@ const BasicInfo = () => {
 
   useEffect(() => {
     const savedFormData = localStorage.getItem("formData");
+    //console.log(savedFormData)
     if (savedFormData) {
       const parsedFormData = JSON.parse(savedFormData);
       for (const key in parsedFormData) {
@@ -38,13 +39,13 @@ const BasicInfo = () => {
     );
     //console.log(res.status);
     if (res.status === 200) {
-      navigate("/FacultyPage/CompleteProfile/Publications");
+      navigate("/FacultyPage/CompleteProfile/Education");
     }
   }
 
   return (
     <div className="container mt-5 shadow-lg p-3 mb-5 bg-white rounded">
-      <h2 className="form-heading mb-4">BasicInfo</h2>
+      <h2 className="form-heading mb-4">Basic Details</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="container mt-4">
         <div className="row mb-3">
           <div className="col-md-4">

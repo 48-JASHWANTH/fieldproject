@@ -206,6 +206,33 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYWN1bHR5X2lkIjoiM
   "nomine_id": "NOM12345"
 }
 
+
+###User education
+POST http://localhost:5000/userApi/Education
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYWN1bHR5X2lkIjoiMSIsImlhdCI6MTcxOTA1MTkzNywiZXhwIjoxNzE5MTM4MzM3fQ.SXVrpyLUBkLYl2erXX1Q2JpVrD3w4A9mr8Xu4uQBG9Y
+
+{
+  "faculty_id": "1",
+  "faculty_10thSchoolName": "XYZ High School",
+  "faculty_10thDateOfPassing": "2000-05-01",
+  "faculty_10thPercentage": 88.75,
+  "faculty_10thBoard": "State Board",
+  "faculty_10thMaxMarks": 500,
+  "faculty_10thObtainedMarks": 443,
+  "faculty_10thHallTicketNumber": "HT123456",
+  "faculty_10thSchoolAddress": "123 Main St, City, Country",
+  "faculty_interCollegelName": "ABC Junior College",
+  "faculty_interYearOfPassing": "2002",
+  "faculty_interPercintage": 90.00,
+  "faculty_interBoard": "State Board",
+  "faculty_degreeType": "B.Tech",
+  "faculty_degreeSchoolName": "DEF University",
+  "faculty_degreeyearOfPassing": "2006",
+  "faculty_degreePercentage": 85.50
+}
+
+
 ###User Authors
 POST http://localhost:5000/userApi/Authors
 Content-Type: application/json

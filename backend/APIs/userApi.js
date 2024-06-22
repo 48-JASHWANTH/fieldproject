@@ -769,6 +769,88 @@ userApp.post(
   })
 );
 
+//User education
+userApp.post(
+  "/Education",
+  verifyToken,
+  expressAsyncHandler(async (req, res) => {
+    let {
+      faculty_id,
+      faculty_10thSchoolName,
+      faculty_10thDateOfPassing,
+      faculty_10thPercentage,
+      faculty_10thBoard,
+      faculty_10thMaxMarks,
+      faculty_10thObtainedMarks,
+      faculty_10thHallTicketNumber,
+      faculty_10thSchoolAddress,
+      faculty_interCollegelName,
+      faculty_interYearOfPassing,
+      faculty_interPercintage,
+      faculty_interBoard,
+      faculty_degreeType,
+      faculty_degreeSchoolName,
+      faculty_degreeyearOfPassing,
+      faculty_degreePercentage
+    } = req.body;
+
+    try {
+      const pool = req.app.get("dbPool"); // Get the database pool from the app context
+      const request = pool.request();
+
+      // Prepare the SQL query
+      const query = `
+        INSERT INTO educationTable (
+          faculty_id,
+          faculty_10thSchoolName,
+          faculty_10thDateOfPassing,
+          faculty_10thPercentage,
+          faculty_10thBoard,
+          faculty_10thMaxMarks,
+          faculty_10thObtainedMarks,
+          faculty_10thHallTicketNumber,
+          faculty_10thSchoolAddress,
+          faculty_interCollegelName,
+          faculty_interYearOfPassing,
+          faculty_interPercintage,
+          faculty_interBoard,
+          faculty_degreeType,
+          faculty_degreeSchoolName,
+          faculty_degreeyearOfPassing,
+          faculty_degreePercentage
+        ) VALUES (
+          '${faculty_id}',
+          '${faculty_10thSchoolName}',
+          '${faculty_10thDateOfPassing}',
+          ${faculty_10thPercentage},
+          '${faculty_10thBoard}',
+          ${faculty_10thMaxMarks},
+          ${faculty_10thObtainedMarks},
+          '${faculty_10thHallTicketNumber}',
+          '${faculty_10thSchoolAddress}',
+          '${faculty_interCollegelName}',
+          '${faculty_interYearOfPassing}',
+          ${faculty_interPercintage},
+          '${faculty_interBoard}',
+          '${faculty_degreeType}',
+          '${faculty_degreeSchoolName}',
+          '${faculty_degreeyearOfPassing}',
+          ${faculty_degreePercentage}
+        )
+      `;
+
+      // Execute the query
+      await request.query(query);
+
+      res.status(200).send("Data inserted successfully");
+    } catch (err) {
+      console.error("SQL error:", err);
+      res.status(500).send("Error inserting data");
+    }
+  })
+);
+
+//Faculty basicInfo
 userApp.get(
   "/FacultyProfile/:faculty_id",
   verifyToken,
