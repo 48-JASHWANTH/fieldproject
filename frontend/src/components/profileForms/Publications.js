@@ -27,24 +27,35 @@ const Publications = () => {
     }
   }, [setValue]);
 
+  const handleSkip = () => {
+    localStorage.setItem("lastCompletedForm", "3");
+    navigate("/FacultyPage/CompleteProfile/Projects");
+  };
+
   useEffect(() => {
     localStorage.setItem("formData", JSON.stringify(formValues));
   }, [formValues]);
 
   async function onSubmit(data) {
-    console.log(data);
-    let res = await axiosWithToken.post(
-      "http://localhost:5000/userApi/Publications",
-      data
-    );
-    console.log(res.status);
-    if (res.status === 200) {
-      navigate("/FacultyPage/CompleteProfile/Projects");
+    //console.log(data);
+    try {
+      let res = await axiosWithToken.post(
+        "http://localhost:5000/userApi/Publications",
+        data
+      );
+      //console.log(res.status);
+      if (res.status === 200) {
+        localStorage.setItem("lastCompletedForm", "3");
+        alert("Data saved successfully...");
+        navigate("/FacultyPage/CompleteProfile/Projects");
+      }
+    } catch (err) {
+      alert("Data has already been saved...");
     }
   }
 
   const handlePrev = () => {
-    navigate('/FacultyPage/CompleteProfile/BasicInfo')
+    navigate("/FacultyPage/CompleteProfile/BasicInfo");
   };
 
   return (
@@ -1169,7 +1180,14 @@ const Publications = () => {
             Prev
           </button>
           <button type="submit" className="btn btn-success">
-            Next
+            Save & Next
+          </button>
+          <button
+            type="button"
+            onClick={handleSkip}
+            className="btn btn-success"
+          >
+            Skip
           </button>
         </div>
       </form>

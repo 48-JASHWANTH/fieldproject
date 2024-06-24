@@ -3,9 +3,11 @@ import axios from "axios";
 
 const AdminPage = () => {
   const [users, setUsers] = useState([]);
+  const [faculties, setFaculties] = useState([]);
 
   useEffect(() => {
     fetchUsers();
+    fetchFaculties();
   }, []);
 
   const fetchUsers = async () => {
@@ -14,6 +16,17 @@ const AdminPage = () => {
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
+    }
+  };
+
+  const fetchFaculties = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/adminApi/faculties"
+      );
+      setFaculties(response.data);
+    } catch (error) {
+      console.error("Error fetching faculties:", error);
     }
   };
 
@@ -75,6 +88,28 @@ const AdminPage = () => {
                   Disapprove
                 </button>
               </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <h2>All Faculties</h2>
+      <table className="table table-bordered">
+        <thead>
+          <tr>
+            <th>Faculty ID</th>
+            <th>Email</th>
+            <th>Contact Number</th>
+            <th>Approve Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {faculties.map((faculty) => (
+            <tr key={faculty.faculty_id}>
+              <td>{faculty.faculty_id}</td>
+              <td>{faculty.email}</td>
+              <td>{faculty.contactNumber}</td>
+              <td>{faculty.approveStatus ? "Approved" : "Unapproved"}</td>
             </tr>
           ))}
         </tbody>

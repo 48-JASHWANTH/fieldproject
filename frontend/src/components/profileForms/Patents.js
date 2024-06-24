@@ -33,18 +33,29 @@ const Patents = () => {
 
   async function onSubmit(data) {
     console.log(data);
-    let res = await axiosWithToken.post(
-      "http://localhost:5000/userApi/Patents",
-      data
-    );
-    console.log(res.status);
-    if (res.status === 200) {
-      navigate("/FacultyPage/CompleteProfile/Nomination");
+    try {
+      let res = await axiosWithToken.post(
+        "http://localhost:5000/userApi/Patents",
+        data
+      );
+      //console.log(res.status);
+      if (res.status === 200) {
+        localStorage.setItem("lastCompletedForm", "5");
+        alert("Data saved successfully...");
+        navigate("/FacultyPage/CompleteProfile/Nomination");
+      }
+    } catch (err) {
+      alert("Data has already been saved...");
     }
   }
 
   const handlePrev = () => {
     navigate("/FacultyPage/CompleteProfile/Projects");
+  };
+
+  const handleSkip = () => {
+    localStorage.setItem("lastCompletedForm", "5");
+    navigate("/FacultyPage/CompleteProfile/Nomination");
   };
 
   return (
@@ -646,7 +657,14 @@ const Patents = () => {
             Prev
           </button>
           <button type="submit" className="btn btn-success">
-            Next
+            Save & Next
+          </button>
+          <button
+            type="button"
+            onClick={handleSkip}
+            className="btn btn-success"
+          >
+            Skip
           </button>
         </div>
       </form>

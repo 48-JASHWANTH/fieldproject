@@ -33,13 +33,20 @@ const BasicInfo = () => {
   }, [formValues]);
 
   async function onSubmit(data) {
-    let res = await axiosWithToken.post(
-      "http://localhost:5000/userApi/BasicInfo",
-      data
-    );
-    //console.log(res.status);
-    if (res.status === 200) {
-      navigate("/FacultyPage/CompleteProfile/Education");
+    try {
+      let res = await axiosWithToken.post(
+        "http://localhost:5000/userApi/BasicInfo",
+        data
+      );
+      //console.log(res.response.status);
+
+      if (res.status === 200) {
+        localStorage.setItem("lastCompletedForm", "1");
+        alert("Data saved successfully...")
+        navigate("/FacultyPage/CompleteProfile/Education");
+      } 
+    } catch (err) {
+      alert("Form has already been saved...")
     }
   }
 
@@ -690,7 +697,7 @@ const BasicInfo = () => {
 
         <div className="d-flex justify-content-end">
           <button type="submit" className="btn btn-success">
-            Next
+            Save & Next
           </button>
         </div>
       </form>

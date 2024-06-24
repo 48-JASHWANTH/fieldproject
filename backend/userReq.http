@@ -260,3 +260,10 @@ Content-Type: application/json
 {
   "email":"ratnajashwanth01@gmail.com"
 }
+
+###form submit status
+PUT http://localhost:5000/userApi/UpdateFormSubmitStatus/22071A3262
+
+
+###
+GET http://localhost:5000/userApi/GetFormSubmitStatus/22071A3262

@@ -1,72 +1,18 @@
-.progress-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #6c757d; /* Gray background */
-    padding: 20px;
-    /* border-radius: 5px; */
-    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
-  }
-  
-  .step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
-    text-align: center;
-    margin: 10px; /* Add margin for spacing */
-    min-width: 80px; /* Minimum width for each step */
-  }
-  
-  .step .step-icon {
-    font-size: 24px;
-    width: 50px;
-    height: 50px;
-    background-color: #d1d1d1; /* Gray background for inactive steps */
-    color: #6c757d; /* Darker gray for icon */
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 5px;
-  }
-  
-  .step .step-label {
-    margin-top: 5px;
-    color: #d1d1d1; /* Gray text for inactive steps */
-  }
-  
-  .step-link.active .step-icon,
-  .step-link:hover .step-icon {
-    background-color: #007bff; /* Blue background for active/hovered steps */
-    color: white; /* White icon for active/hovered steps */
-  }
-  
-  .step-link.active .step-label,
-  .step-link:hover .step-label {
-    color: white; /* White text for active/hovered steps */
-  }
-  
-  /* Responsive styles */
-  @media (max-width: 768px) {
-    .progress-container {
-      flex-direction: column;
-      align-items: stretch; /* Stretch items to full width */
-    }
-  
-    .step {
-      flex-direction: row;
-      justify-content: flex-start;
-      margin: 5px 0;
-    }
-  
-    .step .step-icon {
-      margin-right: 10px; /* Add space between icon and label */
-      margin-bottom: 0; /* Remove bottom margin */
-    }
-  
-    .step .step-label {
-      margin-top: 0; /* Remove top margin */
-    }
-  }
-  
+/* CompleteProfile.css */
+
+/* Default style for navigation links */
+.nav-link {
+  color: white; /* Default text color */
+  text-decoration: none; /* Remove underline */
+}
+
+/* Style for active navigation link */
+.nav-link.active {
+  color: red; /* Text color when active */
+  font-weight: bold; /* Make it bold to highlight */
+}
+
+/* Optional: Add hover effect for better user experience */
+.nav-link:hover {
+  color: lightgray; /* Color when hovering over a link */
+}

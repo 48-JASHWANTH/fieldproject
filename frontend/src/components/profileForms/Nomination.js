@@ -33,22 +33,33 @@ const Nomination = () => {
 
   async function onSubmit(data) {
     console.log(data);
-    let res = await axiosWithToken.post(
-      "http://localhost:5000/userApi/Nomination",
-      data
-    );
-    console.log(res.status);
-    if (res.status === 200) {
-      navigate("/FacultyPage/CompleteProfile/Authors");
+    try {
+      let res = await axiosWithToken.post(
+        "http://localhost:5000/userApi/Nomination",
+        data
+      );
+      console.log(res.status);
+      if (res.status === 200) {
+        localStorage.setItem("lastCompletedForm", "6");
+        alert("Data saved successfully...");
+        navigate("/FacultyPage/CompleteProfile/Authors");
+      }
+    } catch (err) {
+      alert("Data has already been saved...");
     }
   }
+
+  const handleSkip = () => {
+    localStorage.setItem("lastCompletedForm", "6");
+    navigate("/FacultyPage/CompleteProfile/Authors");
+  };
 
   const handlePrev = () => {
     navigate("/FacultyPage/CompleteProfile/Patents");
   };
 
   return (
-    <div className="container  mt-5 shadow-lg p-3 mb-5 bg-white rounded">
+    <div className="container mt-5 shadow-lg p-3 mb-5 bg-white rounded">
       <h2 className="form-heading mb-4">Nominee Details</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="container mt-4">
         <div className="row mb-3">
@@ -247,7 +258,14 @@ const Nomination = () => {
             Prev
           </button>
           <button type="submit" className="btn btn-success">
-            Next
+            Save & Next
+          </button>
+          <button
+            type="button"
+            onClick={handleSkip}
+            className="btn btn-success"
+          >
+            Skip
           </button>
         </div>
       </form>

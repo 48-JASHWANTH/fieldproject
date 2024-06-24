@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Forms.css";
-import { axiosWithToken } from "../../axiosWithToken";
+import axios from "axios"
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+
 
 const Authors = () => {
   const {
@@ -32,17 +32,48 @@ const Authors = () => {
     localStorage.setItem("formData", JSON.stringify(formValues));
   }, [formValues]);
 
-  async function onSubmit(data) {
-    console.log(data);
-    let res = await axiosWithToken.post(
-      "http://localhost:5000/userApi/Authors",
-      data
-    );
-    if (res.status === 200) {
-      navigate("/FacultyPage/FacultyInfo/FacultyProfile");
+  // Function to update formSubmitStatus
+  const updateFormSubmitStatus = async () => {
+    try {
+      const faculty_id = localStorage.getItem("currentFaculty");
+      const res = await axios.put(
+        `http://localhost:5000/userApi/UpdateFormSubmitStatus/${faculty_id}`
+      );
+      if (res.status === 200) {
+        console.log("formSubmitStatus updated successfully");
+      }
+    } catch (error) {
+      console.error("Error updating formSubmitStatus:", error);
     }
-  }
+  };
 
+  // Handle form submission
+  const onSubmit = async (data) => {
+    console.log(data);
+    try {
+      let res = await axios.post(
+        "http://localhost:5000/userApi/Authors",
+        data
+      );
+      if (res.status === 200) {
+        await updateFormSubmitStatus(); // Update the formSubmitStatus upon successful submission
+        localStorage.setItem("lastCompletedForm", "7");
+        alert("Data saved successfully...");
+        navigate("/FacultyPage/FacultyInfo/FacultyProfile");
+      }
+    } catch (err) {
+      alert("Data has already been saved...");
+    }
+  };
+
+  // Handle form skipping
+  const handleSkip = async () => {
+    alert("You have chosen to skip this form.");
+    await updateFormSubmitStatus(); // Update the formSubmitStatus when skipping
+    navigate("/FacultyPage/FacultyInfo/FacultyProfile");
+  };
+
+  // Handle previous button click
   const handlePrev = () => {
     navigate("/FacultyPage/CompleteProfile/Nomination");
   };
@@ -307,6 +338,13 @@ const Authors = () => {
           </button>
           <button type="submit" className="btn btn-success">
             Submit
+          </button>
+          <button
+            type="button"
+            onClick={handleSkip}
+            className="btn btn-success"
+          >
+            Skip
           </button>
         </div>
       </form>

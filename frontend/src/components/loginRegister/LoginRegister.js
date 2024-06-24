@@ -16,7 +16,7 @@ function LoginRegister() {
   const [userType, setUserType] = useState("faculty");
   const [loginAttempted, setLoginAttempted] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [signUpPasswordVisible, setSignUpPasswordVisible] = useState(false); // State to manage password visibility for Sign Up
+  const [signUpPasswordVisible, setSignUpPasswordVisible] = useState(false);
 
   const {
     register: registerSignIn,
@@ -84,7 +84,8 @@ function LoginRegister() {
   let { loginUserStatus, currentUser } = useSelector(
     (state) => state.userAdminLoginReducer
   );
-  //console.log(currentUser)
+
+  //console.log(currentUser);
   function onSignInFormSubmit(userCredentials) {
     setLoginAttempted(true);
     dispatch(userAdminLoginThunk(userCredentials));
@@ -94,8 +95,42 @@ function LoginRegister() {
   useEffect(() => {
     if (loginAttempted) {
       if (loginUserStatus) {
-        if (currentUser.userType === "faculty") {
-          navigate("/FacultyPage");
+        if (currentUser.formSubmitStatus === 1) {
+          navigate("/FacultyPage/FacultyInfo/FacultyProfile");
+        } else {
+          let lastCompletedForm = localStorage.getItem("lastCompletedForm");
+
+          if (!lastCompletedForm) {
+            localStorage.setItem("lastCompletedForm", "0");
+            lastCompletedForm = "0";
+          }
+          if (currentUser.userType === "faculty") {
+            switch (parseInt(lastCompletedForm, 10)) {
+              case 0:
+                navigate("/FacultyPage");
+                break;
+              case 1:
+                navigate("/FacultyPage/CompleteProfile/Education");
+                break;
+              case 2:
+                navigate("/FacultyPage/CompleteProfile/Publications");
+                break;
+              case 3:
+                navigate("/FacultyPage/CompleteProfile/Projects");
+                break;
+              case 4:
+                navigate("/FacultyPage/CompleteProfile/Patents");
+                break;
+              case 5:
+                navigate("/FacultyPage/CompleteProfile/Nomination");
+                break;
+              case 6:
+                navigate("/FacultyPage/CompleteProfile/Authors");
+                break;
+              default:
+                navigate("/FacultyPage");
+            }
+          }
         }
         if (currentUser.userType === "admin") {
           navigate("/AdminPage");
@@ -104,7 +139,7 @@ function LoginRegister() {
       } else if (loginUserStatus === false) {
         setTimeout(() => {
           setDialogMessage("Please check your credentials and try again...!");
-        }, 375);
+        }, 450);
       }
     }
   }, [loginUserStatus, loginAttempted]);
@@ -243,7 +278,7 @@ function LoginRegister() {
                   className="password-toggle-icon"
                   onClick={togglePasswordVisibility}
                 >
-                  {passwordVisible ? <FaEyeSlash/> : <FaEye />}
+                  {passwordVisible ? <FaEyeSlash /> : <FaEye />}
                 </span>
               </div>
               <button className="lr-button m-1 rounded-5">Sign Up</button>

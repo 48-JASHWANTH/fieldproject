@@ -33,18 +33,29 @@ const Projects = () => {
 
   async function onSubmit(data) {
     console.log(data);
-    let res = await axiosWithToken.post(
-      "http://localhost:5000/userApi/Projects",
-      data
-    );
-    console.log(res.status);
-    if (res.status === 200) {
-      navigate("/FacultyPage/CompleteProfile/Patents");
+    try {
+      let res = await axiosWithToken.post(
+        "http://localhost:5000/userApi/Projects",
+        data
+      );
+      console.log(res.status);
+      if (res.status === 200) {
+        localStorage.setItem("lastCompletedForm", "4");
+        alert("Data saved successfully...");
+        navigate("/FacultyPage/CompleteProfile/Patents");
+      }
+    } catch (err) {
+      alert("Data has already been saved...");
     }
   }
 
   const handlePrev = () => {
     navigate("/FacultyPage/CompleteProfile/Publications");
+  };
+
+  const handleSkip = () => {
+    localStorage.setItem("lastCompletedForm", "4");
+    navigate("/FacultyPage/CompleteProfile/Patents");
   };
 
   return (
@@ -80,7 +91,9 @@ const Projects = () => {
               id="project_type"
               defaultValue=""
             >
-              <option value="" disabled>-- Select Project Type --</option>
+              <option value="" disabled>
+                -- Select Project Type --
+              </option>
               <option value="Mini">Mini</option>
               <option value="Major">Major</option>
             </select>
@@ -417,7 +430,14 @@ const Projects = () => {
             Prev
           </button>
           <button type="submit" className="btn btn-success">
-            Next
+            Save & Next
+          </button>
+          <button
+            type="button"
+            onClick={handleSkip}
+            className="btn btn-success"
+          >
+            Skip
           </button>
         </div>
       </form>

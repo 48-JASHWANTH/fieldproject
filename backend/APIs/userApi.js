@@ -230,7 +230,7 @@ userApp.post(
         )
       `;
 
-      await request.query(query);
+      const dbres = await request.query(query);
       res.status(200).send("Basic information saved successfully !!");
     } catch (err) {
       console.error("SQL error:", err);
@@ -760,7 +760,7 @@ userApp.post(
         )
       `;
 
-      await request.query(query);
+      const dbres = await request.query(query);
       res.status(200).send("Data inserted successfully");
     } catch (err) {
       console.error("SQL error:", err);
@@ -791,7 +791,7 @@ userApp.post(
       faculty_degreeType,
       faculty_degreeSchoolName,
       faculty_degreeyearOfPassing,
-      faculty_degreePercentage
+      faculty_degreePercentage,
     } = req.body;
 
     try {
@@ -975,5 +975,70 @@ userApp.post(
     });
   })
 );
+
+//FormSubmit status
+userApp.put(
+  "/UpdateFormSubmitStatus/:id",
+  expressAsyncHandler(async (req, res) => {
+    const { id: faculty_id } = req.params;
+
+    try {
+      const pool = req.app.get("dbPool"); // Assuming the pool is set in the app
+
+      // SQL query to update formSubmitStatus to 1
+      const result = await pool
+        .request()
+        .input("faculty_id", sqlServer.NVarChar, faculty_id)
+        .query(
+          "UPDATE facultyTable SET formSubmitStatus = 1 WHERE faculty_id = @faculty_id"
+        );
+
+      if (result.rowsAffected[0] === 0) {
+        return res
+          .status(400)
+          .json({ Status: "Error updating formSubmitStatus" });
+      }
+
+      return res.json({ Status: "formSubmitStatus updated successfully" });
+    } catch (error) {
+      console.error("Error updating formSubmitStatus:", error);
+      return res.status(500).send("Server error.");
+    }
+  })
+);
+
+//submit status
+userApp.get(
+  "/GetFormSubmitStatus/:id",
+  expressAsyncHandler(async (req, res) => {
+    const { id: faculty_id } = req.params;
+
+    try {
+      const pool = req.app.get("dbPool"); // Assuming the pool is set in the app
+
+      // SQL query to get the formSubmitStatus
+      const result = await pool
+        .request()
+        .input("faculty_id", sqlServer.NVarChar, faculty_id)
+        .query(
+          "SELECT formSubmitStatus FROM facultyTable WHERE faculty_id = @faculty_id"
+        );
+
+      if (result.recordset.length === 0) {
+        return res
+          .status(404)
+          .json({ Status: "Error: Faculty member not found" });
+      }
+
+      const formSubmitStatus = result.recordset[0].formSubmitStatus;
+
+      return res.json({ formSubmitStatus });
+    } catch (error) {
+      console.error("Error retrieving formSubmitStatus:", error);
+      return res.status(500).send("Server error.");
+    }
+  })
+);
+
 
 module.exports = userApp;

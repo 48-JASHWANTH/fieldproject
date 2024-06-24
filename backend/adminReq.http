@@ -24,3 +24,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwia
     "approveStatus":0,
     "userType":"faculty"
 }
+
+
+###All faculties
+GET http://localhost:5000/adminApi/faculties
