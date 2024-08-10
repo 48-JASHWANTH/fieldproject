@@ -9,39 +9,50 @@ const BasicInfo = () => {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm();
+  const formValues = watch();
 
   const navigate = useNavigate();
-  const [dialogMessage, setDialogMessage] = useState("");
 
   useEffect(() => {
-    if (dialogMessage) {
-      const timer = setTimeout(() => {
-        setDialogMessage("");
-      }, 7000);
-      return () => clearTimeout(timer);
+    const savedFormData = localStorage.getItem("formData");
+    //console.log(savedFormData)
+    if (savedFormData) {
+      const parsedFormData = JSON.parse(savedFormData);
+      for (const key in parsedFormData) {
+        setValue(key, parsedFormData[key]);
+      }
     }
-  }, [dialogMessage]);
+  }, [setValue]);
+
+  useEffect(() => {
+    localStorage.setItem("formData", JSON.stringify(formValues));
+  }, [formValues]);
 
   async function onSubmit(data) {
-    console.log(data);
-    let res = await axiosWithToken.post(
-      "http://localhost:5000/userApi/BasicInfo",
-      data
-    );
-    console.log(res.status);
-    if (res.status === 200) {
-      setDialogMessage(res.data.message);
-      navigate("/FacultyPage/CompleteProfile/Publications");
+    try {
+      let res = await axiosWithToken.post(
+        "http://localhost:5000/userApi/BasicInfo",
+        data
+      );
+      //console.log(res.response.status);
+
+      if (res.status === 200) {
+        localStorage.setItem("lastCompletedForm", "1");
+        alert("Data saved successfully...")
+        navigate("/FacultyPage/CompleteProfile/Education");
+      } 
+    } catch (err) {
+      alert("Form has already been saved...")
     }
   }
 
   return (
     <div className="container mt-5 shadow-lg p-3 mb-5 bg-white rounded">
-      {dialogMessage && <div className="dialog-box show">{dialogMessage}</div>}
-      <h2 className="form-heading mb-4">BasicInfo</h2>
-      {dialogMessage && <div className="dialog-box show">{dialogMessage}</div>}
+      <h2 className="form-heading mb-4">Basic Details</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="container mt-4">
         <div className="row mb-3">
           <div className="col-md-4">
@@ -686,7 +697,7 @@ const BasicInfo = () => {
 
         <div className="d-flex justify-content-end">
           <button type="submit" className="btn btn-success">
-            Next
+            Save & Next
           </button>
         </div>
       </form>

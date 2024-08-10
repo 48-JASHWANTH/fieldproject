@@ -5,6 +5,7 @@ const expressAsyncHandler = require("express-async-handler");
 const jsonwebtoken = require("jsonwebtoken");
 require("dotenv").config();
 
+//login
 adminApp.post(
   "/login",
   expressAsyncHandler(async (req, res) => {
@@ -50,6 +51,7 @@ adminApp.post(
   })
 );
 
+//for approve
 adminApp.get(
   "/users",
   expressAsyncHandler(async (req, res) => {
@@ -66,6 +68,7 @@ adminApp.get(
   })
 );
 
+//To approve
 adminApp.put(
   "/approve",
   expressAsyncHandler(async (req, res) => {
@@ -87,6 +90,23 @@ adminApp.put(
     } catch (err) {
       console.error("Error during faculty approval:", err);
       res.status(500).json({ message: "Error during faculty approval" });
+    }
+  })
+);
+
+//To retrieve all faculties
+adminApp.get(
+  "/faculties",
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const pool = req.app.get("dbPool");
+      const result = await pool.request().query(`
+              SELECT * FROM facultyTable
+          `);
+      res.status(200).json(result.recordset);
+    } catch (err) {
+      console.error("Error retrieving faculties:", err);
+      res.status(500).json({ message: "Error retrieving faculties" });
     }
   })
 );

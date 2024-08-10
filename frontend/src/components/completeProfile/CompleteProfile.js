@@ -6,36 +6,72 @@ import "./CompleteProfile.css";
 function CompleteProfile() {
   return (
     <div>
-      <div className="navbar-complete">
+      <div className="navbar-complete bg-secondary">
         <Navbar expand="lg">
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto d-flex justify-content-around w-100">
-              <NavLink className="nav-link" to="BasicInfo">
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+                to="BasicInfo"
+              >
                 Basic Info
               </NavLink>
-              <NavLink className="nav-link" to="Education">
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+                to="Education"
+              >
                 Education
               </NavLink>
-              <NavLink className="nav-link" to="Publications">
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+                to="Publications"
+              >
                 Publications
               </NavLink>
-              <NavLink className="nav-link" to="Projects">
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+                to="Projects"
+              >
                 Projects
               </NavLink>
-              <NavLink className="nav-link" to="Patents">
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+                to="Patents"
+              >
                 Patents
               </NavLink>
-              <NavLink className="nav-link" to="Nomination">
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+                to="Nomination"
+              >
                 Nomination
               </NavLink>
-              <NavLink className="nav-link" to="Authors">
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+                to="Authors"
+              >
                 Authors
               </NavLink>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
       </div>
+      <h2 className="m-4">Complete Profile</h2>
       <Outlet />
     </div>
   );

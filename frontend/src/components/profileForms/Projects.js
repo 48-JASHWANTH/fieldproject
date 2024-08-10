@@ -9,31 +9,43 @@ const Projects = () => {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm();
+  const formValues = watch();
 
   const navigate = useNavigate();
-  const [dialogMessage, setDialogMessage] = useState("");
 
   useEffect(() => {
-    if (dialogMessage) {
-      const timer = setTimeout(() => {
-        setDialogMessage("");
-      }, 7000);
-      return () => clearTimeout(timer);
+    const savedFormData = localStorage.getItem("formData");
+    if (savedFormData) {
+      const parsedFormData = JSON.parse(savedFormData);
+      for (const key in parsedFormData) {
+        setValue(key, parsedFormData[key]);
+      }
     }
-  }, [dialogMessage]);
+  }, [setValue]);
+
+  useEffect(() => {
+    localStorage.setItem("formData", JSON.stringify(formValues));
+  }, [formValues]);
 
   async function onSubmit(data) {
     console.log(data);
-    let res = await axiosWithToken.post(
-      "http://localhost:5000/userApi/Projects",
-      data
-    );
-    console.log(res.status);
-    if (res.status === 200) {
-      setDialogMessage(res.data.message);
-      navigate("/FacultyPage/CompleteProfile/Patents");
+    try {
+      let res = await axiosWithToken.post(
+        "http://localhost:5000/userApi/Projects",
+        data
+      );
+      console.log(res.status);
+      if (res.status === 200) {
+        localStorage.setItem("lastCompletedForm", "4");
+        alert("Data saved successfully...");
+        navigate("/FacultyPage/CompleteProfile/Patents");
+      }
+    } catch (err) {
+      alert("Data has already been saved...");
     }
   }
 
@@ -41,9 +53,14 @@ const Projects = () => {
     navigate("/FacultyPage/CompleteProfile/Publications");
   };
 
+  const handleSkip = () => {
+    localStorage.setItem("lastCompletedForm", "4");
+    navigate("/FacultyPage/CompleteProfile/Patents");
+  };
+
   return (
     <div className="container mt-5 shadow-lg p-3 mb-5 bg-white rounded">
-      <h2 className="form-heading mb-4">Project Form</h2>
+      <h2 className="form-heading mb-4">Project Details</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="container mt-4">
         <div className="row mb-3">
           <div className="col-md-4">
@@ -74,9 +91,11 @@ const Projects = () => {
               id="project_type"
               defaultValue=""
             >
-              <option value="" disabled>-- Select Project Type --</option>
-              <option value="Mini">Mini</option>
-              <option value="Major">Major</option>
+              <option value="" disabled>
+                -- Select Project Type --
+              </option>
+              <option value="Funded Project">Funded Project</option>
+              <option value="Consultancy Project">Consultancy Project</option>
             </select>
             {errors.project_type && (
               <div className="invalid-feedback">Project type is required</div>
@@ -411,7 +430,14 @@ const Projects = () => {
             Prev
           </button>
           <button type="submit" className="btn btn-success">
-            Next
+            Save & Next
+          </button>
+          <button
+            type="button"
+            onClick={handleSkip}
+            className="btn btn-success"
+          >
+            Skip
           </button>
         </div>
       </form>

@@ -7,11 +7,16 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { userAdminLoginThunk } from "../../redux/slices/userAdminSlice";
 import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function LoginRegister() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const [userType, setUserType] = useState("faculty");
+  const [loginAttempted, setLoginAttempted] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [signUpPasswordVisible, setSignUpPasswordVisible] = useState(false);
 
   const {
     register: registerSignIn,
@@ -57,9 +62,9 @@ function LoginRegister() {
       }
       resetSignUp();
     } catch (err) {
-      if(err.response.status === 403){
+      if (err.response.status === 403) {
         setDialogMessage(err.response.data.message);
-      }else{
+      } else {
         setDialogMessage("Sign Up failed !");
       }
     }
@@ -69,7 +74,7 @@ function LoginRegister() {
     if (dialogMessage) {
       const timer = setTimeout(() => {
         setDialogMessage("");
-      }, 7000);
+      }, 6000);
       return () => clearTimeout(timer);
     }
   }, [dialogMessage]);
@@ -80,24 +85,75 @@ function LoginRegister() {
     (state) => state.userAdminLoginReducer
   );
 
+  //console.log(currentUser);
   function onSignInFormSubmit(userCredentials) {
+    setLoginAttempted(true);
     dispatch(userAdminLoginThunk(userCredentials));
     resetSignIn();
   }
 
   useEffect(() => {
-    if (loginUserStatus) {
-      if (currentUser.userType === "faculty") {
-        navigate("/FacultyPage");
-      }
-      if (currentUser.userType === "admin") {
-        navigate("/AdminPage");
+    if (loginAttempted) {
+      if (loginUserStatus) {
+        if (currentUser.formSubmitStatus === 1) {
+          navigate("/FacultyPage/FacultyInfo/FacultyProfile");
+        } else {
+          let lastCompletedForm = localStorage.getItem("lastCompletedForm");
+
+          if (!lastCompletedForm) {
+            localStorage.setItem("lastCompletedForm", "0");
+            lastCompletedForm = "0";
+          }
+          if (currentUser.userType === "faculty") {
+            switch (parseInt(lastCompletedForm, 10)) {
+              case 0:
+                navigate("/FacultyPage");
+                break;
+              case 1:
+                navigate("/FacultyPage/CompleteProfile/Education");
+                break;
+              case 2:
+                navigate("/FacultyPage/CompleteProfile/Publications");
+                break;
+              case 3:
+                navigate("/FacultyPage/CompleteProfile/Projects");
+                break;
+              case 4:
+                navigate("/FacultyPage/CompleteProfile/Patents");
+                break;
+              case 5:
+                navigate("/FacultyPage/CompleteProfile/Nomination");
+                break;
+              case 6:
+                navigate("/FacultyPage/CompleteProfile/Authors");
+                break;
+              default:
+                navigate("/FacultyPage");
+            }
+          }
+        }
+        if (currentUser.userType === "admin") {
+          navigate("/AdminPage");
+        }
+        setDialogMessage("Login Successful !");
+      } else if (loginUserStatus === false) {
+        setTimeout(() => {
+          setDialogMessage("Please check your credentials and try again...!");
+        }, 450);
       }
     }
-  }, [loginUserStatus]);
+  }, [loginUserStatus, loginAttempted]);
 
   const handleUserTypeChange = (event) => {
     setUserType(event.target.value);
+  };
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const toggleSignUpPasswordVisibility = () => {
+    setSignUpPasswordVisible(!signUpPasswordVisible);
   };
 
   return (
@@ -154,17 +210,25 @@ function LoginRegister() {
                   : registerSignIn("faculty_id"))}
                 className="lr-input m-1 rounded-3"
               />
-              <input
-                type="password"
-                id="password"
-                placeholder="Password"
-                required
-                {...registerSignIn("password")}
-                className="lr-input m-1 rounded-3"
-              />
-              <a href="#" className="lr-a">
+              <div className="password-container">
+                <input
+                  type={passwordVisible ? "text" : "password"}
+                  id="password"
+                  placeholder="Password"
+                  required
+                  {...registerSignIn("password")}
+                  className="lr-input m-1 rounded-3"
+                />
+                <span
+                  className="password-toggle-icon"
+                  onClick={togglePasswordVisibility}
+                >
+                  {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
+              <NavLink className="nav-link" to="ForgetPassword">
                 Forgot your Password?
-              </a>
+              </NavLink>
               <button className="lr-button m-2 rounded-5">Sign In</button>
             </form>
           </div>
@@ -181,7 +245,7 @@ function LoginRegister() {
                 placeholder="Faculty ID"
                 required
                 {...registerSignUp("faculty_id")}
-                className="lr-input m-1 rounded-4"
+                className="lr-input m-1 rounded-3"
               />
               <input
                 type="email"
@@ -189,7 +253,7 @@ function LoginRegister() {
                 placeholder="Email"
                 required
                 {...registerSignUp("email")}
-                className="lr-input m-1 rounded-4"
+                className="lr-input m-1 rounded-3"
               />
               <input
                 type="tel"
@@ -197,16 +261,26 @@ function LoginRegister() {
                 placeholder="Contact number"
                 required
                 {...registerSignUp("contactNumber")}
-                className="lr-input m-1 rounded-4"
+                pattern="[0-9]{10}"
+                maxLength="10"
+                className="lr-input m-1 rounded-3"
               />
-              <input
-                type="password"
-                id="password"
-                placeholder="Password"
-                required
-                {...registerSignUp("password")}
-                className="lr-input m-1 rounded-4"
-              />
+              <div className="password-container">
+                <input
+                  type={passwordVisible ? "text" : "password"}
+                  id="password"
+                  placeholder="Password"
+                  required
+                  {...registerSignUp("password")}
+                  className="lr-input m-1 rounded-3"
+                />
+                <span
+                  className="password-toggle-icon"
+                  onClick={togglePasswordVisibility}
+                >
+                  {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
               <button className="lr-button m-1 rounded-5">Sign Up</button>
             </form>
           </div>

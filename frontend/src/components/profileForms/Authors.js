@@ -2,49 +2,85 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Forms.css";
-import { axiosWithToken } from "../../axiosWithToken";
+import axios from "axios"
 import { useNavigate } from "react-router-dom";
+
 
 const Authors = () => {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm();
+  const formValues = watch();
 
   const navigate = useNavigate();
-  const [dialogMessage, setDialogMessage] = useState("");
 
   useEffect(() => {
-    if (dialogMessage) {
-      const timer = setTimeout(() => {
-        setDialogMessage("");
-      }, 7000);
-      return () => clearTimeout(timer);
+    const savedFormData = localStorage.getItem("formData");
+    if (savedFormData) {
+      const parsedFormData = JSON.parse(savedFormData);
+      for (const key in parsedFormData) {
+        setValue(key, parsedFormData[key]);
+      }
     }
-  }, [dialogMessage]);
+  }, [setValue]);
 
-  async function onSubmit(data) {
+  useEffect(() => {
+    localStorage.setItem("formData", JSON.stringify(formValues));
+  }, [formValues]);
+
+  // Function to update formSubmitStatus
+  const updateFormSubmitStatus = async () => {
+    try {
+      const faculty_id = localStorage.getItem("currentFaculty");
+      const res = await axios.put(
+        `http://localhost:5000/userApi/UpdateFormSubmitStatus/${faculty_id}`
+      );
+      if (res.status === 200) {
+        console.log("formSubmitStatus updated successfully");
+      }
+    } catch (error) {
+      console.error("Error updating formSubmitStatus:", error);
+    }
+  };
+
+  // Handle form submission
+  const onSubmit = async (data) => {
     console.log(data);
-    let res = await axiosWithToken.post(
-      "http://localhost:5000/userApi/Authors",
-      data
-    );
-    console.log(res.status);
-    if (res.status === 200) {
-      setDialogMessage(res.data.message);
-      navigate("/FacultyPage/FacultyInfo/FacultyProfile");
+    try {
+      let res = await axios.post(
+        "http://localhost:5000/userApi/Authors",
+        data
+      );
+      if (res.status === 200) {
+        await updateFormSubmitStatus(); // Update the formSubmitStatus upon successful submission
+        localStorage.setItem("lastCompletedForm", "7");
+        alert("Data saved successfully...");
+        navigate("/FacultyPage/FacultyInfo/FacultyProfile");
+      }
+    } catch (err) {
+      alert("Data has already been saved...");
     }
-  }
+  };
 
+  // Handle form skipping
+  const handleSkip = async () => {
+    alert("You have chosen to skip this form.");
+    await updateFormSubmitStatus(); // Update the formSubmitStatus when skipping
+    navigate("/FacultyPage/FacultyInfo/FacultyProfile");
+  };
+
+  // Handle previous button click
   const handlePrev = () => {
     navigate("/FacultyPage/CompleteProfile/Nomination");
   };
 
-
   return (
-    <div className="container  mt-5 shadow-lg p-3 mb-5 bg-white rounded">
-      <h2 className="form-heading mb-4">Authors Form</h2>
+    <div className="container mt-5 shadow-lg p-3 mb-5 bg-white rounded">
+      <h2 className="form-heading mb-4">Authors Details</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="container mt-4">
         <div className="row mb-3">
           <div className="col-md-4">
@@ -284,7 +320,7 @@ const Authors = () => {
                 No
               </label>
             </div>
-            {errors.isAuthorForeign && (
+            {errors.is_author_foreign && (
               <div className="invalid-feedback d-block">
                 This field is required
               </div>
@@ -302,6 +338,13 @@ const Authors = () => {
           </button>
           <button type="submit" className="btn btn-success">
             Submit
+          </button>
+          <button
+            type="button"
+            onClick={handleSkip}
+            className="btn btn-success"
+          >
+            Skip
           </button>
         </div>
       </form>

@@ -24,6 +24,8 @@ import FundedProjectsTemp from './components/others/FundedProjectsTemp'
 import NotificationTemp from './components/others/NotificationTemp'
 import PatentsTemp from './components/others/PatentsTemp';
 import PublicationsTemp from './components/others/PublicationsTemp';
+import ForgotPassword from './components/forgetPassword/ForgetPassword';
+import ResetPassword from './components/resetPassword/ResetPassword';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -32,6 +34,14 @@ function App() {
       path: "",
       element: <LoginRegister />,
       errorElement: <ErrorPage />,
+    },
+    {
+      path:"/ForgetPassword",
+      element:<ForgotPassword></ForgotPassword>
+    },
+    {
+      path:"/ResetPassword/:id/:token",
+      element:<ResetPassword></ResetPassword>
     },
     {
       path: "/FacultyPage",

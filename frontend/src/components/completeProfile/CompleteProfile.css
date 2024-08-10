@@ -1,13 +1,18 @@
-.navbar-complete {
-    background-color: #6c757d;
+/* CompleteProfile.css */
+
+/* Default style for navigation links */
+.nav-link {
+  color: white; /* Default text color */
+  text-decoration: none; /* Remove underline */
 }
 
-.navbar-complete .navbar-brand,
-.navbar-complete .nav-link {
-    color: white;
+/* Style for active navigation link */
+.nav-link.active {
+  color: red; /* Text color when active */
+  font-weight: bold; /* Make it bold to highlight */
 }
 
-.navbar-complete .navbar-brand:hover,
-.navbar-complete .nav-link:hover {
-    color: #17a2b8;
+/* Optional: Add hover effect for better user experience */
+.nav-link:hover {
+  color: lightgray; /* Color when hovering over a link */
 }

@@ -6,6 +6,9 @@ const jsonwebtoken = require("jsonwebtoken");
 require("dotenv").config();
 const moment = require("moment");
 const verifyToken = require("../middlewares/verifyToken");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
+const sqlServer = require("mssql");
 
 // User registration
 userApp.post(
@@ -227,7 +230,7 @@ userApp.post(
         )
       `;
 
-      await request.query(query);
+      const dbres = await request.query(query);
       res.status(200).send("Basic information saved successfully !!");
     } catch (err) {
       console.error("SQL error:", err);
@@ -297,13 +300,13 @@ userApp.post(
       "YYYY-MM-DD"
     );
 
-    scopus = scopus==="Yes" ? 1 : 0;
-    webOfScience = webOfScience==="Yes" ? 1 : 0;
-    SCI = SCI==="Yes" ? 1 : 0;
-    GoogleScholar = GoogleScholar="Yes" ? 1 : 0;
-    UGCRated = UGCRated==="Yes" ? 1 : 0;
-    foreignAuthor = foreignAuthor==="Yes" ? 1 : 0;
-    studentPresence = studentPresence==="Yes" ? 1 : 0;
+    scopus = scopus === "Yes" ? 1 : 0;
+    webOfScience = webOfScience === "Yes" ? 1 : 0;
+    SCI = SCI === "Yes" ? 1 : 0;
+    GoogleScholar = GoogleScholar = "Yes" ? 1 : 0;
+    UGCRated = UGCRated === "Yes" ? 1 : 0;
+    foreignAuthor = foreignAuthor === "Yes" ? 1 : 0;
+    studentPresence = studentPresence === "Yes" ? 1 : 0;
 
     try {
       const pool = req.app.get("dbPool");
@@ -454,9 +457,9 @@ userApp.post(
     appliedDate = moment(appliedDate, "YYYY-MM-DD").format("YYYY-MM-DD");
     dateofSanction = moment(dateofSanction, "YYYY-MM-DD").format("YYYY-MM-DD");
 
-    foreign_ = foreign_==="Yes" ? 1 : 0;
-    studentPresence = studentPresence==="Yes" ? 1 : 0;
-    funded = funded==="Yes" ? 1 : 0;
+    foreign_ = foreign_ === "Yes" ? 1 : 0;
+    studentPresence = studentPresence === "Yes" ? 1 : 0;
+    funded = funded === "Yes" ? 1 : 0;
 
     try {
       const pool = req.app.get("dbPool");
@@ -563,8 +566,8 @@ userApp.post(
     );
     dateOfGranting = moment(dateOfGranting, "YYYY-MM-DD").format("YYYY-MM-DD");
 
-    foreign_ = foreign_==="Yes" ? 1 : 0;
-    studentPresence = studentPresence==="Yes" ? 1 : 0;
+    foreign_ = foreign_ === "Yes" ? 1 : 0;
+    studentPresence = studentPresence === "Yes" ? 1 : 0;
 
     try {
       const pool = req.app.get("dbPool");
@@ -721,9 +724,9 @@ userApp.post(
       is_author_foreign = false,
     } = req.body;
 
-    is_author_from_industry = is_author_from_industry==="Yes" ? 1 : 0
-    is_author_student = is_author_student==="Yes" ? 1 : 0
-    is_author_foreign = is_author_foreign==="Yes" ? 1 : 0
+    is_author_from_industry = is_author_from_industry === "Yes" ? 1 : 0;
+    is_author_student = is_author_student === "Yes" ? 1 : 0;
+    is_author_foreign = is_author_foreign === "Yes" ? 1 : 0;
 
     try {
       const pool = req.app.get("dbPool");
@@ -757,7 +760,7 @@ userApp.post(
         )
       `;
 
-      await request.query(query);
+      const dbres = await request.query(query);
       res.status(200).send("Data inserted successfully");
     } catch (err) {
       console.error("SQL error:", err);
@@ -765,5 +768,277 @@ userApp.post(
     }
   })
 );
+
+//User education
+userApp.post(
+  "/Education",
+  verifyToken,
+  expressAsyncHandler(async (req, res) => {
+    let {
+      faculty_id,
+      faculty_10thSchoolName,
+      faculty_10thDateOfPassing,
+      faculty_10thPercentage,
+      faculty_10thBoard,
+      faculty_10thMaxMarks,
+      faculty_10thObtainedMarks,
+      faculty_10thHallTicketNumber,
+      faculty_10thSchoolAddress,
+      faculty_interCollegelName,
+      faculty_interYearOfPassing,
+      faculty_interPercintage,
+      faculty_interBoard,
+      faculty_degreeType,
+      faculty_degreeSchoolName,
+      faculty_degreeyearOfPassing,
+      faculty_degreePercentage,
+    } = req.body;
+
+    try {
+      const pool = req.app.get("dbPool"); // Get the database pool from the app context
+      const request = pool.request();
+
+      // Prepare the SQL query
+      const query = `
+        INSERT INTO educationTable (
+          faculty_id,
+          faculty_10thSchoolName,
+          faculty_10thDateOfPassing,
+          faculty_10thPercentage,
+          faculty_10thBoard,
+          faculty_10thMaxMarks,
+          faculty_10thObtainedMarks,
+          faculty_10thHallTicketNumber,
+          faculty_10thSchoolAddress,
+          faculty_interCollegelName,
+          faculty_interYearOfPassing,
+          faculty_interPercintage,
+          faculty_interBoard,
+          faculty_degreeType,
+          faculty_degreeSchoolName,
+          faculty_degreeyearOfPassing,
+          faculty_degreePercentage
+        ) VALUES (
+          '${faculty_id}',
+          '${faculty_10thSchoolName}',
+          '${faculty_10thDateOfPassing}',
+          ${faculty_10thPercentage},
+          '${faculty_10thBoard}',
+          ${faculty_10thMaxMarks},
+          ${faculty_10thObtainedMarks},
+          '${faculty_10thHallTicketNumber}',
+          '${faculty_10thSchoolAddress}',
+          '${faculty_interCollegelName}',
+          '${faculty_interYearOfPassing}',
+          ${faculty_interPercintage},
+          '${faculty_interBoard}',
+          '${faculty_degreeType}',
+          '${faculty_degreeSchoolName}',
+          '${faculty_degreeyearOfPassing}',
+          ${faculty_degreePercentage}
+        )
+      `;
+
+      // Execute the query
+      await request.query(query);
+
+      res.status(200).send("Data inserted successfully");
+    } catch (err) {
+      console.error("SQL error:", err);
+      res.status(500).send("Error inserting data");
+    }
+  })
+);
+
+//Faculty basicInfo
+userApp.get(
+  "/FacultyProfile/:faculty_id",
+  verifyToken,
+  expressAsyncHandler(async (req, res) => {
+    const faculty_id = req.params.faculty_id;
+    if (!faculty_id) {
+      return res.status(400).json({ message: "Faculty ID is required" });
+    }
+
+    try {
+      const pool = req.app.get("dbPool");
+      const result = await pool
+        .request()
+        .input("faculty_id", faculty_id)
+        .query("SELECT * FROM basicInfoTable WHERE faculty_id = @faculty_id");
+
+      if (result.recordset.length === 0) {
+        return res.status(404).json({ message: "Faculty not found" });
+      }
+
+      res.json(result.recordset[0]);
+    } catch (err) {
+      console.error("Error during faculty profile retrieval:", err);
+      res
+        .status(500)
+        .json({ message: "Error during faculty profile retrieval" });
+    }
+  })
+);
+
+//Forget password
+userApp.post(
+  "/ForgetPassword",
+  expressAsyncHandler(async (req, res) => {
+    //console.log(req.body)
+    const { email } = req.body;
+    const pool = req.app.get("dbPool");
+
+    try {
+      const result = await pool
+        .request()
+        .input("email", sqlServer.NVarChar, email)
+        .query("SELECT * FROM FacultyTable WHERE email = @email");
+
+      //console.log(result)
+
+      if (result.recordset.length === 0) {
+        return res
+          .status(400)
+          .json({ message: "User with this email does not exist." });
+      }
+      //console.log(result.recordset)
+      const token = jsonwebtoken.sign(
+        { faculty_id: result.recordset[0].faculty_id },
+        process.env.JWT_SECRET,
+        { expiresIn: "1d" }
+      );
+      //console.log(token)
+      var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.user1,
+          pass: process.env.pass1,
+        },
+      });
+      console.log(result.recordset[0].faculty_id);
+      var mailOptions = {
+        from: process.env.user1,
+        to: `${email}`,
+        subject: "Reset your password",
+        text: `http://localhost:5000/resetPassword/${result.recordset[0].faculty_id}/${token}`,
+      };
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+        } else {
+          return res.status(200).json({ message: "Success" });
+        }
+      });
+    } catch (error) {
+      console.error("Error in forgot password:", error);
+      res.status(500).send("Server error.");
+    }
+  })
+);
+
+//Reset password
+userApp.post(
+  "/ResetPassword/:id/:token",
+  expressAsyncHandler(async (req, res) => {
+    const { id: faculty_id, token } = req.params;
+    const { password } = req.body;
+
+    jsonwebtoken.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+      if (err) {
+        return res.json({ Status: "Error with token" });
+      } else {
+        try {
+          const pool = req.app.get("dbPool");
+
+          const hashedPassword = await bcryptjs.hash(password, 10);
+
+          const result = await pool
+            .request()
+            .input("faculty_id", sqlServer.NVarChar, faculty_id)
+            .input("hashedPassword", sqlServer.NVarChar, hashedPassword) // Provide hashedPassword directly as input
+            .query(
+              "UPDATE facultyTable SET password = @hashedPassword WHERE faculty_id = @faculty_id"
+            );
+
+          if (result.rowsAffected[0] === 0) {
+            return res.status(400).json({ Status: "Error updating password" });
+          }
+
+          return res.json({ Status: "Password updated successfully" });
+        } catch (error) {
+          console.error("Error resetting password:", error);
+          return res.status(500).send("Server error.");
+        }
+      }
+    });
+  })
+);
+
+//FormSubmit status
+userApp.put(
+  "/UpdateFormSubmitStatus/:id",
+  expressAsyncHandler(async (req, res) => {
+    const { id: faculty_id } = req.params;
+
+    try {
+      const pool = req.app.get("dbPool"); // Assuming the pool is set in the app
+
+      // SQL query to update formSubmitStatus to 1
+      const result = await pool
+        .request()
+        .input("faculty_id", sqlServer.NVarChar, faculty_id)
+        .query(
+          "UPDATE facultyTable SET formSubmitStatus = 1 WHERE faculty_id = @faculty_id"
+        );
+
+      if (result.rowsAffected[0] === 0) {
+        return res
+          .status(400)
+          .json({ Status: "Error updating formSubmitStatus" });
+      }
+
+      return res.json({ Status: "formSubmitStatus updated successfully" });
+    } catch (error) {
+      console.error("Error updating formSubmitStatus:", error);
+      return res.status(500).send("Server error.");
+    }
+  })
+);
+
+//submit status
+userApp.get(
+  "/GetFormSubmitStatus/:id",
+  expressAsyncHandler(async (req, res) => {
+    const { id: faculty_id } = req.params;
+
+    try {
+      const pool = req.app.get("dbPool"); // Assuming the pool is set in the app
+
+      // SQL query to get the formSubmitStatus
+      const result = await pool
+        .request()
+        .input("faculty_id", sqlServer.NVarChar, faculty_id)
+        .query(
+          "SELECT formSubmitStatus FROM facultyTable WHERE faculty_id = @faculty_id"
+        );
+
+      if (result.recordset.length === 0) {
+        return res
+          .status(404)
+          .json({ Status: "Error: Faculty member not found" });
+      }
+
+      const formSubmitStatus = result.recordset[0].formSubmitStatus;
+
+      return res.json({ formSubmitStatus });
+    } catch (error) {
+      console.error("Error retrieving formSubmitStatus:", error);
+      return res.status(500).send("Server error.");
+    }
+  })
+);
+
 
 module.exports = userApp;

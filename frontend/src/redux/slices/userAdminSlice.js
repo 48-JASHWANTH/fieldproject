@@ -4,24 +4,44 @@ import axios from "axios";
 export const userAdminLoginThunk = createAsyncThunk(
   "user-admin-login",
   async (userCredObj, thunkApi) => {
+    let res;
     try {
-      let res;
       if (userCredObj.userType === "admin") {
-        res = await axios.post("http://localhost:5000/adminApi/login", userCredObj);
-      } else if (userCredObj.userType === "faculty") {
-        res = await axios.post("http://localhost:5000/userApi/login", userCredObj);
-      }
-      
-      if (res.status === 200) {
-        // Store token in local storage/session storage
-        localStorage.setItem("token", res.data.payload);
-        // Return data
+        const res = await axios.post(
+          "http://localhost:5000/adminApi/login",
+          userCredObj
+        );
+
+        if (res.status === 200) {
+          // Store token in local storage/session storage
+          localStorage.setItem("token", res.data.payload);
+          // Return data
+          //console.log(res)
+        } else {
+          return thunkApi.rejectWithValue(res.data.message);
+        }
         return res.data;
-      } else {
-        return thunkApi.rejectWithValue(res.data.message);
+      }
+      if (userCredObj.userType === "faculty") {
+        const res = await axios.post(
+          "http://localhost:5000/userApi/login",
+          userCredObj
+        );
+        if (res.status === 200) {
+          // Store token in local storage/session storage
+          localStorage.setItem("token", res.data.payload);
+          localStorage.setItem("currentFaculty",res.data.user.faculty_id)
+          // Return data
+          //console.log(res)
+        } else {
+          return thunkApi.rejectWithValue(res.data.message);
+        }
+        return res.data;
       }
     } catch (err) {
-      return thunkApi.rejectWithValue(err.response?.data?.message || err.message);
+      return thunkApi.rejectWithValue(
+        err.response?.data?.message || err.message
+      );
     }
   }
 );
@@ -36,7 +56,7 @@ export const userAdminSlice = createSlice({
     errorMessage: "",
   },
   reducers: {
-    resetState: (state) => {
+    resetState: (state, action) => {
       state.isPending = false;
       state.loginUserStatus = false;
       state.currentUser = {};
@@ -46,13 +66,14 @@ export const userAdminSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(userAdminLoginThunk.pending, (state) => {
+      .addCase(userAdminLoginThunk.pending, (state, action) => {
         state.isPending = true;
       })
       .addCase(userAdminLoginThunk.fulfilled, (state, action) => {
         state.isPending = false;
         state.loginUserStatus = true;
-        state.currentUser = action.payload.user 
+        //console.log(action.payload)
+        state.currentUser = action.payload.user;
         state.errorOccurred = false;
         state.errorMessage = "";
       })
@@ -61,7 +82,7 @@ export const userAdminSlice = createSlice({
         state.loginUserStatus = false;
         state.currentUser = {};
         state.errorOccurred = true;
-        state.errorMessage = action.payload || 'Login failed';
+        state.errorMessage = action.payload || "Login failed";
       });
   },
 });

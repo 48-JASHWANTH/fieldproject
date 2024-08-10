@@ -18,7 +18,7 @@ input:not([type=radio]){
     border: 1px solid gray !important;
     margin-right: 8px !important;
 }
-
+  
 .dialog-box {
     position: fixed;
     top: 10px;
@@ -36,7 +36,7 @@ input:not([type=radio]){
     text-align: center; 
     font-size: 1.2rem; 
   }
-  
+
   .dialog-box.show {
     display: block; 
   }

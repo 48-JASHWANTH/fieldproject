@@ -1,7 +1,7 @@
 import React from "react";
 import "./FacultyPage.css";
 import MainNavBar from "../mainNavBar/MainNavBar";
-import Footer from "../footer/Footer";
+//import Footer from "../footer/Footer";
 import { Outlet } from "react-router-dom";
 
 function FacultyPage() {
