@@ -175,9 +175,8 @@ const Publications = () => {
                 <option value="" disabled>
                   -- Select Department --
                 </option>
-                <option value="dept1">Department 1</option>
-                <option value="dept2">Department 2</option>
-                <option value="dept3">Department 3</option>
+                <option value="dept1">Computer Science & Engineering</option>
+                <option value="dept2">Computer Science & Business Systems</option>
               </select>
               {errors.dept && (
                 <div className="invalid-feedback">Department is required</div>

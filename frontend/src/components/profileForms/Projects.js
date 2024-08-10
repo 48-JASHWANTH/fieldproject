@@ -94,8 +94,8 @@ const Projects = () => {
               <option value="" disabled>
                 -- Select Project Type --
               </option>
-              <option value="Mini">Mini</option>
-              <option value="Major">Major</option>
+              <option value="Funded Project">Funded Project</option>
+              <option value="Consultancy Project">Consultancy Project</option>
             </select>
             {errors.project_type && (
               <div className="invalid-feedback">Project type is required</div>
